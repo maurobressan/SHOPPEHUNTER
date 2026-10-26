@@ -1,4 +1,4 @@
-# Shopee Hunter Pro — Progresso
+# Shoppe Hunter — Progresso
 
 ## Como usar (no seu computador)
 - **Abrir:** dois cliques em `iniciar.bat`. Deixe a janela preta aberta e use o navegador (http://localhost:3000).
@@ -30,3 +30,10 @@ Calculadora com tarifas oficiais (out/2026), cálculo reverso, kits, cenários; 
 - Preços dos planos (R$ 49,90 e R$ 99,90) são provisórios — ajuste em Administração → Planos.
 - Termos e Privacidade são modelos: revisão jurídica obrigatória antes de vender.
 - Limitador de tentativas de login fica na memória do servidor (trocar por Redis se usar várias instâncias).
+
+## 26/10/2026 — Identidade visual Shoppe Hunter
+- Logo aplicada (menu, cabeçalho, login, favicon, ícone da extensão). Arquivos gerados por `scripts/brand-assets.mjs` a partir de `brand-src/logo-original.webp`.
+- Tema claro como padrão, tema escuro opcional (botão da lua na barra superior). Cores da logo como variáveis em `globals.css`.
+- Menu lateral agrupado (Descobrir, Analisar, Minha loja, Conta), barra superior com busca, alertas e menu do usuário; atalhos rápidos e progresso dos primeiros passos no painel.
+- Página inicial, preços e login redesenhados; calculadora com o lucro por venda em destaque.
+

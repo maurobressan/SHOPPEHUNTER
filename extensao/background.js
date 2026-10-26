@@ -1,4 +1,4 @@
-// Faz as chamadas ao Shopee Hunter Pro (o content script não chama o servidor diretamente).
+// Faz as chamadas ao Shoppe Hunter (o content script não chama o servidor diretamente).
 async function cfg() {
   const { appUrl, token } = await chrome.storage.sync.get(["appUrl", "token"]);
   return { appUrl: (appUrl || "http://localhost:3000").replace(/\/$/, ""), token: token || "" };
@@ -16,7 +16,7 @@ async function call(path, init = {}) {
     if (!r.ok) return { error: data.error || "Erro " + r.status };
     return data;
   } catch (e) {
-    return { error: "Não foi possível conectar ao Shopee Hunter Pro em " + appUrl + ". Ele está aberto?" };
+    return { error: "Não foi possível conectar ao Shoppe Hunter em " + appUrl + ". Ele está aberto?" };
   }
 }
 

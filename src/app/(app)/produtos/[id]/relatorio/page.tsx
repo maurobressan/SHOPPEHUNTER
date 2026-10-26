@@ -22,7 +22,7 @@ export default async function Relatorio({ params, searchParams }: { params: Prom
         <PrintButton />
       </div>
       <article className="rounded-xl border border-line bg-panel p-8 print:border-0 print:bg-white print:p-0 print:text-black">
-        <div className="mb-4 text-xs text-mute print:text-gray-600">Shopee Hunter Pro · {ctx.accountName} · período de {periodo} dias</div>
+        <div className="mb-4 text-xs text-mute print:text-gray-600">Shoppe Hunter · {ctx.accountName} · período de {periodo} dias</div>
         <Markdown text={rulesReport(a)} />
       </article>
     </div>

@@ -51,7 +51,7 @@ export default async function Conta({ searchParams }: { searchParams: Promise<SP
               <td className={td}>{m.user.email}</td>
               <td className={td}><Badge tone={m.role === "owner" ? "green" : "default"}>{ROLE[m.role]}</Badge></td>
               <td className={td}>{dateTime(m.user.lastLoginAt)}</td>
-              <td className={td}>{manager && m.role !== "owner" && <form action={removeMember}><input type="hidden" name="id" value={m.id} /><button className="text-xs text-mute hover:text-red-300">remover</button></form>}</td>
+              <td className={td}>{manager && m.role !== "owner" && <form action={removeMember}><input type="hidden" name="id" value={m.id} /><button className="text-xs text-mute hover:text-bad">remover</button></form>}</td>
             </tr>
           ))}
           {invites.map((i) => (
@@ -60,7 +60,7 @@ export default async function Conta({ searchParams }: { searchParams: Promise<SP
               <td className={td}>{i.email}</td>
               <td className={td}><Badge>{ROLE[i.role]}</Badge></td>
               <td className={td}>expira {date(i.expiresAt)}</td>
-              <td className={td}>{manager && <form action={revokeInvite}><input type="hidden" name="id" value={i.id} /><button className="text-xs text-mute hover:text-red-300">cancelar</button></form>}</td>
+              <td className={td}>{manager && <form action={revokeInvite}><input type="hidden" name="id" value={i.id} /><button className="text-xs text-mute hover:text-bad">cancelar</button></form>}</td>
             </tr>
           ))}
         </Table>
@@ -88,7 +88,7 @@ export default async function Conta({ searchParams }: { searchParams: Promise<SP
             <p>Enquanto você navega na Shopee, a extensão lê o que está na tela do anúncio (preço, “vendidos”, nota, loja) e mostra na hora as tarifas e a margem estimada. Com um clique, salva o anúncio no seu produto para acompanhar a evolução.</p>
             <ol className="mt-3 list-decimal space-y-1 pl-5">
               <li>No Chrome, abra <code>chrome://extensions</code> e ative o <b>Modo do desenvolvedor</b>.</li>
-              <li>Clique em <b>Carregar sem compactação</b> e escolha a pasta <code>extensao</code> do Shopee Hunter Pro.</li>
+              <li>Clique em <b>Carregar sem compactação</b> e escolha a pasta <code>extensao</code> do Shoppe Hunter.</li>
               <li>Clique no ícone da extensão, informe o endereço <code>{appUrl()}</code> e o token gerado aqui.</li>
               <li>Abra um anúncio na shopee.com.br: o painel do Hunter aparece no canto da tela.</li>
             </ol>
@@ -101,7 +101,7 @@ export default async function Conta({ searchParams }: { searchParams: Promise<SP
                   <td className={td}>{t.name}</td>
                   <td className={`${td} font-mono text-xs`}>{t.prefix}…</td>
                   <td className={td}>{dateTime(t.lastUsedAt)}</td>
-                  <td className={td}><form action={revokeApiToken}><input type="hidden" name="id" value={t.id} /><button className="text-xs text-mute hover:text-red-300">revogar</button></form></td>
+                  <td className={td}><form action={revokeApiToken}><input type="hidden" name="id" value={t.id} /><button className="text-xs text-mute hover:text-bad">revogar</button></form></td>
                 </tr>
               ))}
             </Table>

@@ -64,7 +64,7 @@ export default async function Assistente({ searchParams }: { searchParams: Promi
         <Card className="lg:col-span-2" title={current ? `Relatório — ${current.product.name}` : "Relatório"} actions={current && (
           <div className="flex items-center gap-2">
             <Badge tone={current.engine === "regras" ? "default" : "violet"}>{current.engine}{current.model ? ` · ${current.model}` : ""}</Badge>
-            <form action={deleteReport}><input type="hidden" name="id" value={current.id} /><button className="text-xs text-mute hover:text-red-300">excluir</button></form>
+            <form action={deleteReport}><input type="hidden" name="id" value={current.id} /><button className="text-xs text-mute hover:text-bad">excluir</button></form>
           </div>
         )}>
           {current ? <Markdown text={current.content} /> : <Empty title="Selecione um produto e gere a análise" />}

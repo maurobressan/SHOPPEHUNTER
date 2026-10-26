@@ -10,7 +10,15 @@ import { Card, PageHeader, Stat, Badge, TrendBadge, RecBadge, Empty, Table, td, 
 import { brl, dateTime, pct, signedPct } from "@/lib/format";
 import { TREND_LABELS, type TrendClass } from "@/lib/trends";
 import { Flash, type SP } from "@/components/Flash";
-import { CheckCircle2, Circle } from "lucide-react";
+import { CheckCircle2, ArrowRight, Calculator, Search, FileSpreadsheet, Truck } from "lucide-react";
+
+// Atalhos para as tarefas mais comuns, logo no topo do painel.
+const QUICK = [
+  { href: "/calculadora", label: "Calcular lucro", text: "Taxas oficiais da Shopee", icon: Calculator, color: "from-[#1565ff] to-[#3b82f6]" },
+  { href: "/explorar", label: "Explorar produtos", text: "Pesquisar anúncios", icon: Search, color: "from-[#0aa5c8] to-[#18c8e8]" },
+  { href: "/fornecedores", label: "Fornecedores", text: "Registrar cotação", icon: Truck, color: "from-[#16a050] to-[#3ddc84]" },
+  { href: "/vendas", label: "Minhas vendas", text: "Importar planilha", icon: FileSpreadsheet, color: "from-[#0b1e4f] to-[#1565ff]" },
+];
 
 export default async function Painel({ searchParams }: { searchParams: Promise<SP> }) {
   const sp = await searchParams;
@@ -40,6 +48,7 @@ export default async function Painel({ searchParams }: { searchParams: Promise<S
     { done: orders > 0, label: "Importar a planilha de vendas da sua loja", href: "/vendas" },
   ];
   const showOnboarding = !settings.onboardingDismissed && steps.some((x) => !x.done);
+  const doneCount = steps.filter((x) => x.done).length;
 
   return (
     <>
@@ -49,18 +58,42 @@ export default async function Painel({ searchParams }: { searchParams: Promise<S
       <Flash sp={sp} />
 
       {showOnboarding && (
-        <Card title="Primeiros passos" className="mb-6" actions={<form action={dismissOnboarding}><button className="text-xs text-mute hover:text-ink">ocultar</button></form>}>
+        <Card
+          title={<>Primeiros passos <span className="ml-2 text-sm font-medium text-mute">{doneCount} de {steps.length} concluídos</span></>}
+          className="mb-6"
+          actions={<form action={dismissOnboarding}><button className="text-xs font-medium text-mute hover:text-ink">ocultar</button></form>}
+        >
+          <div className="mb-4 h-2 overflow-hidden rounded-full bg-panel2">
+            <div className="h-full rounded-full bg-gradient-to-r from-[#1565ff] via-[#18c8e8] to-[#3ddc84]" style={{ width: `${(doneCount / steps.length) * 100}%` }} />
+          </div>
           <div className="grid gap-2 md:grid-cols-2">
-            {steps.map((x) => (
-              <Link key={x.label} href={x.href} className="flex items-center gap-2 rounded-lg px-2 py-1.5 text-sm hover:bg-panel2">
-                {x.done ? <CheckCircle2 size={17} className="text-brand-green" /> : <Circle size={17} className="text-mute" />}
-                <span className={x.done ? "text-mute line-through" : "text-ink"}>{x.label}</span>
+            {steps.map((x, i) => (
+              <Link key={x.label} href={x.href} className={`group flex items-center gap-3 rounded-xl border px-3 py-2.5 text-sm transition ${x.done ? "border-transparent bg-panel2/50" : "border-line hover:border-brand-blue/40 hover:bg-panel2/60"}`}>
+                {x.done ? (
+                  <CheckCircle2 size={22} className="shrink-0 text-ok" />
+                ) : (
+                  <span className="grid h-[22px] w-[22px] shrink-0 place-items-center rounded-full bg-brand-blue/10 text-xs font-bold text-brand-blue">{i + 1}</span>
+                )}
+                <span className={`flex-1 ${x.done ? "text-mute line-through" : "font-medium text-ink"}`}>{x.label}</span>
+                {!x.done && <ArrowRight size={16} className="text-mute transition group-hover:translate-x-0.5 group-hover:text-brand-blue" />}
               </Link>
             ))}
           </div>
-          {!settings.demoMode && <p className="mt-3 text-xs text-mute">Quer ver tudo funcionando antes? Ative o Modo DEMO em <Link className="text-brand-blue" href="/configuracoes">Configurações</Link>.</p>}
+          {!settings.demoMode && <p className="mt-4 text-xs text-mute">Quer ver tudo funcionando antes? Ative o Modo DEMO em <Link className="font-semibold text-brand-blue" href="/configuracoes">Configurações</Link>.</p>}
         </Card>
       )}
+
+      <div className="mb-6 grid grid-cols-2 gap-3 md:grid-cols-4">
+        {QUICK.map(({ href, label, text, icon: Icon, color }) => (
+          <Link key={href} href={href} className="group flex items-center gap-3 rounded-2xl border border-line bg-panel p-3.5 shadow-card transition hover:-translate-y-0.5 hover:border-brand-blue/30 hover:shadow-lift">
+            <span className={`grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-gradient-to-br ${color} text-white`}><Icon size={19} /></span>
+            <span className="min-w-0">
+              <span className="block text-sm font-bold text-ink">{label}</span>
+              <span className="block truncate text-xs text-mute">{text}</span>
+            </span>
+          </Link>
+        ))}
+      </div>
 
       <div className="grid grid-cols-2 gap-4 lg:grid-cols-4">
         <Stat label="Produtos monitorados" value={analyses.length} hint={`${listings} anúncios · ${snapshots} snapshots`} />
@@ -82,7 +115,7 @@ export default async function Painel({ searchParams }: { searchParams: Promise<S
                   <td className={td}>
                     <Link href={`/produtos/${a.product.id}`} className="font-medium hover:text-brand-blue">{a.product.name}</Link> <DemoTag show={a.product.isDemo} />
                   </td>
-                  <td className={`${td} font-semibold ${a.score.confirmed ? "text-brand-green" : "text-amber-300"}`}>{a.score.score!.toFixed(0)}{!a.score.confirmed && "*"}</td>
+                  <td className={`${td} font-semibold ${a.score.confirmed ? "text-brand-green" : "text-warn"}`}>{a.score.score!.toFixed(0)}{!a.score.confirmed && "*"}</td>
                   <td className={td}><TrendBadge c={a.trend.classification} /></td>
                   <td className={td}>{a.trend.salesPeriod ? Math.round(a.trend.salesPeriod.value) : "—"} <span className="text-xs text-mute">{signedPct(a.trend.growthPeriod)}</span></td>
                   <td className={td}>{pct(a.calc?.contributionPct)}</td>

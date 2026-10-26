@@ -8,10 +8,10 @@ export default function Termos() {
   return (
     <article className="md mx-auto max-w-3xl px-4 py-14 sm:px-6">
       <h1>Termos de Uso</h1>
-      <p>Estes termos regem o uso do Shopee Hunter Pro, oferecido por {empresa}, inscrita sob {doc}. Ao criar uma conta, você concorda com eles.</p>
+      <p>Estes termos regem o uso do Shoppe Hunter, oferecido por {empresa}, inscrita sob {doc}. Ao criar uma conta, você concorda com eles.</p>
       <h2>1. O serviço</h2>
       <p>Ferramenta de apoio à decisão para vendedores de marketplaces: cálculo de tarifas e margens, histórico de preços e vendas acumuladas, análise de concorrência, registro de fornecedores e importação de planilhas do próprio usuário.</p>
-      <p>O Shopee Hunter Pro é independente e não tem vínculo com a Shopee. Nomes e marcas citados pertencem aos seus titulares.</p>
+      <p>O Shoppe Hunter é independente e não tem vínculo com a Shopee. Nomes e marcas citados pertencem aos seus titulares.</p>
       <h2>2. Natureza das informações</h2>
       <p>Indicadores, recomendações e projeções são estimativas baseadas nos dados disponíveis e nas premissas informadas pelo usuário. Não constituem garantia de vendas, lucro ou resultado. As taxas da plataforma podem mudar; verifique sempre a documentação oficial antes de decisões relevantes.</p>
       <h2>3. Conta e uso aceitável</h2>

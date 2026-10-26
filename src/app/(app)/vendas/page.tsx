@@ -71,7 +71,7 @@ export default async function Vendas({ searchParams }: { searchParams: Promise<S
                         <button className="text-xs text-brand-blue">ok</button>
                       </form>
                     </td>
-                    <td className={`${td} font-medium ${r.profit !== null && r.profit < 0 ? "text-red-400" : "text-green-400"}`}>{r.profit === null ? <span className="text-xs text-mute">sem custo</span> : brl(r.profit)}</td>
+                    <td className={`${td} font-medium ${r.profit !== null && r.profit < 0 ? "text-bad" : "text-ok"}`}>{r.profit === null ? <span className="text-xs text-mute">sem custo</span> : brl(r.profit)}</td>
                     <td className={`${td} text-xs text-mute`}>{r.cancelled}/{r.returned}/{r.pending}</td>
                   </tr>
                 );
@@ -87,7 +87,7 @@ export default async function Vendas({ searchParams }: { searchParams: Promise<S
               <tr key={b.id}>
                 <td className={td}>{b.filename}</td><td className={td}>{dateTime(b.importedAt)}</td><td className={td}>{b.totalRows}</td>
                 <td className={td}>{b.accepted}</td><td className={td}>{b.duplicates}</td><td className={td}>{b.rejected}</td>
-                <td className={td}><form action={deleteBatch}><input type="hidden" name="id" value={b.id} /><button className="text-xs text-mute hover:text-red-300">desfazer</button></form></td>
+                <td className={td}><form action={deleteBatch}><input type="hidden" name="id" value={b.id} /><button className="text-xs text-mute hover:text-bad">desfazer</button></form></td>
               </tr>
             ))}
           </Table>

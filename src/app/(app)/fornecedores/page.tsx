@@ -82,12 +82,12 @@ export default async function Fornecedores({ searchParams }: { searchParams: Pro
                           {q.productUrl && <a href={q.productUrl} target="_blank" rel="noreferrer" className="text-xs text-brand-blue">produto</a>}
                         </td>
                         <td className={td}>{q.supplier.kind === "varejo" ? <Badge tone="amber" title="Anúncio de varejo: não é preço de atacado">varejo</Badge> : <Badge tone={q.supplier.country === "Brasil" ? "green" : "blue"}>{KIND_LABEL[q.supplier.kind] ?? q.supplier.kind}</Badge>}</td>
-                        <td className={td}>{q.unitPrice === null ? <span className="text-amber-300">Sob consulta</span> : brl(q.unitPrice)}{q.tiers && <div className="text-[11px] text-mute">faixas: {q.tiers}</div>}</td>
+                        <td className={td}>{q.unitPrice === null ? <span className="text-warn">Sob consulta</span> : brl(q.unitPrice)}{q.tiers && <div className="text-[11px] text-mute">faixas: {q.tiers}</div>}</td>
                         <td className={td}>{q.moq ?? "—"}</td>
                         <td className={td}>{brl(q.shippingCost)}</td>
                         <td className={td}>{brl(landed)}</td>
                         <td className={td}>{q.leadTimeDays ? `${q.leadTimeDays} d` : "—"}</td>
-                        <td className={`${td} font-medium ${r && r.contributionPct > 0 ? "text-green-400" : "text-red-400"}`}>{r ? `${pct(r.contributionPct)} (${brl(r.contributionMargin)})` : "—"}</td>
+                        <td className={`${td} font-medium ${r && r.contributionPct > 0 ? "text-ok" : "text-bad"}`}>{r ? `${pct(r.contributionPct)} (${brl(r.contributionMargin)})` : "—"}</td>
                         <td className={td}>{q.unitPrice === null ? "—" : brl(lot * q.unitPrice + (q.shippingCost ?? 0))}</td>
                         <td className={`${td} text-xs text-mute`}>{date(q.quoteDate)}<br />{q.channel}</td>
                         <td className={td}>
@@ -96,7 +96,7 @@ export default async function Fornecedores({ searchParams }: { searchParams: Pro
                               <form action={chooseQuote}><input type="hidden" name="productId" value={a.product.id} /><input type="hidden" name="quoteId" value={q.id} /><input type="hidden" name="_back" value={backUrl} /><button className="text-xs text-brand-blue">escolher</button></form>
                             ))}
                             {r && <Link href={`/calculadora?p=${a.product.id}&q=${q.id}`} className="text-xs text-brand-blue">calcular</Link>}
-                            <form action={deleteQuote}><input type="hidden" name="id" value={q.id} /><input type="hidden" name="_back" value={backUrl} /><button className="text-xs text-mute hover:text-red-300">excluir</button></form>
+                            <form action={deleteQuote}><input type="hidden" name="id" value={q.id} /><input type="hidden" name="_back" value={backUrl} /><button className="text-xs text-mute hover:text-bad">excluir</button></form>
                           </div>
                         </td>
                       </tr>

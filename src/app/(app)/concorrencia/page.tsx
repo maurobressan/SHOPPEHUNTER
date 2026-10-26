@@ -59,7 +59,7 @@ export default async function Concorrencia({ searchParams }: { searchParams: Pro
                   <div className="mb-2 text-xs font-semibold uppercase text-mute">Kits/combos (preço do kit = mediana × unidades × 0,95)</div>
                   <Table head={["Kit", "Preço do kit", "Tarifas vendendo separado", "Tarifas no kit", "Economia de tarifa"]}>
                     {c.kitIdeas.map((k) => (
-                      <tr key={k.units}><td className={td}>{k.units} un.</td><td className={td}>{brl(k.kitPrice)}</td><td className={td}>{brl(k.feeSeparate)}</td><td className={td}>{brl(k.feeKit)}</td><td className={`${td} text-green-400`}>{brl(k.saving)}</td></tr>
+                      <tr key={k.units}><td className={td}>{k.units} un.</td><td className={td}>{brl(k.kitPrice)}</td><td className={td}>{brl(k.feeSeparate)}</td><td className={td}>{brl(k.feeKit)}</td><td className={`${td} text-ok`}>{brl(k.saving)}</td></tr>
                     ))}
                   </Table>
                 </div>
@@ -92,7 +92,7 @@ export default async function Concorrencia({ searchParams }: { searchParams: Pro
                       </div>
                     </td>
                     <td className={td}>
-                      <form action={unlinkListing}><input type="hidden" name="id" value={l.id} /><input type="hidden" name="_back" value={backUrl} /><button className="text-xs text-mute hover:text-red-300">desvincular</button></form>
+                      <form action={unlinkListing}><input type="hidden" name="id" value={l.id} /><input type="hidden" name="_back" value={backUrl} /><button className="text-xs text-mute hover:text-bad">desvincular</button></form>
                     </td>
                   </tr>
                 ))}

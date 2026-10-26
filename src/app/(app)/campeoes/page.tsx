@@ -62,16 +62,16 @@ export default async function Campeoes({ searchParams }: { searchParams: Promise
                   <details className="mt-1 text-xs text-mute">
                     <summary className="cursor-pointer text-brand-blue/80">como foi calculado</summary>
                     <ul className="mt-1 space-y-0.5">{a.score.justification.map((j, k) => <li key={k}>{j}</li>)}</ul>
-                    {a.score.risks.length > 0 && <div className="mt-1 text-red-300">Riscos: {a.score.risks.join(" · ")}</div>}
+                    {a.score.risks.length > 0 && <div className="mt-1 text-bad">Riscos: {a.score.risks.join(" · ")}</div>}
                   </details>
                 </td>
                 <td className={td}>
                   <div className="flex items-center gap-2">
                     <div className="h-2 w-16 overflow-hidden rounded bg-panel2"><div className="h-full bg-gradient-to-r from-brand-blue to-brand-green" style={{ width: `${a.score.score ?? 0}%` }} /></div>
-                    <span className={`font-semibold ${a.score.confirmed ? "" : "text-amber-300"}`} title={a.score.confirmed ? "" : "provisório: dados insuficientes"}>{a.score.score === null ? "—" : a.score.score.toFixed(0)}{!a.score.confirmed && "*"}</span>
+                    <span className={`font-semibold ${a.score.confirmed ? "" : "text-warn"}`} title={a.score.confirmed ? "" : "provisório: dados insuficientes"}>{a.score.score === null ? "—" : a.score.score.toFixed(0)}{!a.score.confirmed && "*"}</span>
                   </div>
                 </td>
-                <td className={td}><span className={a.score.confidence >= MIN_CONFIDENCE ? "text-green-400" : "text-amber-400"}>{pct(a.score.confidence, 0)}</span></td>
+                <td className={td}><span className={a.score.confidence >= MIN_CONFIDENCE ? "text-ok" : "text-warn"}>{pct(a.score.confidence, 0)}</span></td>
                 <td className={td}>{a.trend.salesPeriod ? <>{int(a.trend.salesPeriod.value)} <EstTag observed={a.trend.salesPeriod.observed} confidence={a.trend.salesPeriod.confidence} /></> : "—"}</td>
                 <td className={td}>{signedPct(a.trend.growthPeriod)}</td>
                 <td className={td}><TrendBadge c={a.trend.classification} /></td>

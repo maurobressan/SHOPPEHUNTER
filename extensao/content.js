@@ -51,7 +51,7 @@
     const linked = ctx && ctx.listing && ctx.listing.product;
     root.innerHTML = `<style>${CSS}</style>
       <div class="box">
-        <div class="hd"><div class="logo">H</div><b style="flex:1">Shopee Hunter</b><span id="tg" style="color:#8b97b3">–</span></div>
+        <div class="hd"><div class="logo">H</div><b style="flex:1">Shoppe Hunter</b><span id="tg" style="color:#8b97b3">–</span></div>
         <div class="bd">
           ${ctx && ctx.error ? `<div class="msg bad">${esc(ctx.error)}</div>` : ""}
           <label>Título</label><input id="title" value="${esc(data.title)}">
@@ -75,7 +75,7 @@
           </select>
           <input id="newName" placeholder="nome do novo produto" style="margin-top:6px" value="${esc((data.title || "").slice(0, 60))}">
           <button id="save">Salvar no Hunter</button>
-          <button id="open" class="ghost">Abrir Shopee Hunter Pro</button>
+          <button id="open" class="ghost">Abrir Shoppe Hunter</button>
           <div id="msg" class="msg"></div>
           ${ctx && ctx.listing && ctx.listing.snapshots.length ? `<div class="hist">Já acompanhado: ${ctx.listing.snapshots.length} registro(s). Último: ${new Date(ctx.listing.snapshots[0].referenceDate).toLocaleDateString("pt-BR")} — ${brl(ctx.listing.snapshots[0].price)}, ${ctx.listing.snapshots[0].salesCumulative ?? "?"} vendidos.</div>` : ""}
         </div>

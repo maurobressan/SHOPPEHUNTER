@@ -1,4 +1,4 @@
-# Publicar o Shopee Hunter Pro (GitHub + Vercel + Neon Postgres)
+# Publicar o Shoppe Hunter (GitHub + Vercel + Neon Postgres)
 
 O projeto já está preparado:
 - `prisma/postgres/` → esquema e migração do banco de produção (PostgreSQL), testados.

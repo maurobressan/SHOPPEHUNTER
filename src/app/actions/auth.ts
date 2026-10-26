@@ -77,7 +77,7 @@ export async function requestReset(f: FormData) {
     const token = newToken();
     await prisma.passwordReset.create({ data: { userId: user.id, tokenHash: sha256(token), expiresAt: new Date(Date.now() + 3600000) } });
     const link = `${appUrl()}/redefinir-senha/${token}`;
-    const sent = await sendEmail(email, "Redefinir senha — Shopee Hunter Pro", `<p>Para criar uma nova senha, acesse: <a href="${link}">${link}</a></p><p>O link vale por 1 hora.</p>`);
+    const sent = await sendEmail(email, "Redefinir senha — Shoppe Hunter", `<p>Para criar uma nova senha, acesse: <a href="${link}">${link}</a></p><p>O link vale por 1 hora.</p>`);
     // Sem serviço de e-mail configurado (uso local), mostra o link na tela apenas fora de produção.
     if (!sent && !emailConfigured() && process.env.NODE_ENV !== "production") redirect(`/redefinir-senha/${token}`);
   }

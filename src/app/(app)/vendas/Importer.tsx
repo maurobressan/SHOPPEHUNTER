@@ -47,7 +47,7 @@ export function Importer() {
           <Notice tone="green">
             {state.filename}: {state.result.accepted} linhas importadas · {state.result.duplicates} duplicadas ignoradas · {state.result.rejected} rejeitadas.
             {state.result.errors.length > 0 && (
-              <ul className="mt-2 list-disc pl-5 text-xs text-red-200">{state.result.errors.map((e) => <li key={e.row}>Linha {e.row}: {e.message}</li>)}</ul>
+              <ul className="mt-2 list-disc pl-5 text-xs text-bad">{state.result.errors.map((e) => <li key={e.row}>Linha {e.row}: {e.message}</li>)}</ul>
             )}
           </Notice>
         )}
@@ -57,7 +57,7 @@ export function Importer() {
             <div className="grid gap-3 md:grid-cols-4">
               {FIELDS.map((f) => (
                 <label key={f.key} className="block text-xs">
-                  <span className="mb-1 block text-mute">{f.label}{f.required && <span className="text-red-400"> *</span>}</span>
+                  <span className="mb-1 block text-mute">{f.label}{f.required && <span className="text-bad"> *</span>}</span>
                   <select
                     className={input}
                     value={map[f.key] ?? ""}

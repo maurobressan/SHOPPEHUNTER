@@ -74,7 +74,7 @@ export default async function Comparar({ searchParams }: { searchParams: Promise
                   return (
                     <tr key={r.label}>
                       <td className="px-3 py-2.5 text-mute">{r.label}</td>
-                      {items.map((a) => <td key={a.product.id} className={`px-3 py-2.5 ${b !== null && r.num?.(a) === b ? "font-semibold text-green-400" : ""}`}>{r.get(a)}</td>)}
+                      {items.map((a) => <td key={a.product.id} className={`px-3 py-2.5 ${b !== null && r.num?.(a) === b ? "font-semibold text-ok" : ""}`}>{r.get(a)}</td>)}
                     </tr>
                   );
                 })}

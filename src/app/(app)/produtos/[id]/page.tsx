@@ -59,8 +59,8 @@ export default async function ProdutoPage({ params, searchParams }: { params: Pr
         </Card>
         <Card title="Recomendação" actions={<RecBadge rec={a.score.recommendation} confirmed={a.score.confirmed} />}>
           <ul className="space-y-1 text-xs text-mute">{a.score.justification.map((j) => <li key={j}>{j}</li>)}</ul>
-          {a.score.advantages.length > 0 && <div className="mt-3 text-xs"><div className="mb-1 font-semibold text-green-400">Vantagens</div>{a.score.advantages.map((x) => <div key={x}>+ {x}</div>)}</div>}
-          {a.score.risks.length > 0 && <div className="mt-3 text-xs"><div className="mb-1 font-semibold text-red-300">Riscos</div>{a.score.risks.map((x) => <div key={x}>− {x}</div>)}</div>}
+          {a.score.advantages.length > 0 && <div className="mt-3 text-xs"><div className="mb-1 font-semibold text-ok">Vantagens</div>{a.score.advantages.map((x) => <div key={x}>+ {x}</div>)}</div>}
+          {a.score.risks.length > 0 && <div className="mt-3 text-xs"><div className="mb-1 font-semibold text-bad">Riscos</div>{a.score.risks.map((x) => <div key={x}>− {x}</div>)}</div>}
           <p className="mt-3 text-[11px] text-mute">Apoio à decisão — não é garantia de vendas.</p>
           <form action={generateAiReportAction} className="mt-4 flex gap-2">
             <input type="hidden" name="productId" value={id} /><input type="hidden" name="periodo" value={periodo} /><input type="hidden" name="useAi" value="1" />
@@ -84,7 +84,7 @@ export default async function ProdutoPage({ params, searchParams }: { params: Pr
                       <td className={td}>{v.toLocaleString("pt-BR")}</td>
                       <td className={td}>{brl(x.revenueAfterDiscount * v)}</td>
                       <td className={td}>{brl(x.monthlyContribution)}</td>
-                      <td className={`${td} font-semibold ${x.monthlyNetProfit >= 0 ? "text-green-400" : "text-red-400"}`}>{brl(x.monthlyNetProfit)}</td>
+                      <td className={`${td} font-semibold ${x.monthlyNetProfit >= 0 ? "text-ok" : "text-bad"}`}>{brl(x.monthlyNetProfit)}</td>
                       <td className={td}>{brl((x.productCost + settings.packagingCost) * v)}</td>
                     </tr>
                   );
@@ -95,7 +95,7 @@ export default async function ProdutoPage({ params, searchParams }: { params: Pr
                 <div className="mt-3 rounded-lg bg-panel2 p-3 text-xs text-mute">
                   <b className="text-ink">Lote de {a.chosenQuote?.moq ?? settings.testLotUnits} un.</b> ({brl(a.lot.investment)}): vendendo {a.lot.hypothesis}/mês
                   <span title="Hipótese: capturar 5% das vendas mensais observadas nos concorrentes."> (hipótese de 5% do mercado observado)</span>, o lote esgota em {a.lot.daysToSellOut ?? "—"} dias e o dinheiro
-                  volta em {a.lot.paybackDay === null ? "mais de " + a.lot.series.length + " dias" : `${a.lot.paybackDay} dias`} (repasse de {settings.payoutDelayDays} dias). Lucro do lote: <b className={a.lot.profit >= 0 ? "text-green-400" : "text-red-400"}>{brl(a.lot.profit)}</b>.
+                  volta em {a.lot.paybackDay === null ? "mais de " + a.lot.series.length + " dias" : `${a.lot.paybackDay} dias`} (repasse de {settings.payoutDelayDays} dias). Lucro do lote: <b className={a.lot.profit >= 0 ? "text-ok" : "text-bad"}>{brl(a.lot.profit)}</b>.
                   <Link href={`/calculadora?p=${id}`} className="ml-1 text-brand-blue">simular outro ritmo →</Link>
                 </div>
               )}

@@ -38,7 +38,7 @@ const Row = ({ l, v, strong, neg, sub }: { l: string; v: string; strong?: boolea
       {l}
       {sub && <span className="ml-1 text-xs text-mute/70">{sub}</span>}
     </span>
-    <span className={neg ? "text-red-300" : strong ? "text-ink" : "text-ink/90"}>{v}</span>
+    <span className={`shrink-0 whitespace-nowrap tabular-nums ${neg ? "text-bad" : strong ? "text-ink" : "text-ink/90"}`}>{v}</span>
   </div>
 );
 
@@ -113,7 +113,7 @@ export function Calculator(props: {
           <div className="mb-4 flex flex-wrap items-center gap-3 text-sm">
             <span className="text-mute">Vendedor:</span>
             {(["CNPJ", "CPF"] as const).map((s) => (
-              <button key={s} onClick={() => setSeller(s)} className={`rounded-md border px-3 py-1 ${seller === s ? "border-brand-green bg-brand-green/10 text-brand-green" : "border-line text-mute"}`}>{s}</button>
+              <button key={s} onClick={() => setSeller(s)} className={`rounded-lg border px-3.5 py-1 font-semibold transition ${seller === s ? "border-brand-blue bg-brand-blue text-white" : "border-line text-mute hover:text-ink"}`}>{s}</button>
             ))}
             {seller === "CPF" && (
               <label className="flex items-center gap-2 text-mute"><input type="checkbox" checked={cpfHigh} onChange={(e) => setCpfHigh(e.target.checked)} /> mais de 450 pedidos em 90 dias (+R$ 3/item)</label>
@@ -139,6 +139,13 @@ export function Calculator(props: {
         </Card>
 
         <Card title="Resultado por venda" className="xl:col-span-2">
+          <div className={`mb-4 rounded-2xl p-4 text-white ${r.profitPerUnit >= 0 ? "bg-gradient-to-r from-[#12894c] to-[#22c55e]" : "bg-gradient-to-r from-[#b91c1c] to-[#ef4444]"}`}>
+            <div className="text-xs font-semibold text-white/85">Lucro estimado por venda</div>
+            <div className="mt-0.5 flex flex-wrap items-baseline gap-x-3">
+              <span className="text-3xl font-extrabold tracking-tight tabular-nums">{brl(r.profitPerUnit)}</span>
+              <span className="text-sm font-semibold text-white/90">{pct(r.profitPct)} do preço</span>
+            </div>
+          </div>
           <Row l="Receita bruta" v={brl(r.grossRevenue)} />
           <Row l="(−) Desconto do vendedor" v={brl(-r.sellerDiscount)} neg={r.sellerDiscount > 0} />
           <Row l="Receita após descontos" v={brl(r.revenueAfterDiscount)} strong />
@@ -152,7 +159,7 @@ export function Calculator(props: {
           <Row l="(−) Impostos" v={brl(-r.tax)} neg />
           <Row l="(−) Anúncios + perdas" v={brl(-(r.ads + r.loss))} neg />
           <Row l="Custo variável total" v={brl(r.variableCosts)} />
-          <div className={`mt-2 rounded-lg p-3 ${r.contributionMargin >= 0 ? "bg-brand-green/10" : "bg-red-500/10"}`}>
+          <div className={`mt-2 rounded-lg p-3 ${r.contributionMargin >= 0 ? "bg-brand-green/10" : "bg-bad/10"}`}>
             <Row l="Margem de contribuição" v={`${brl(r.contributionMargin)} · ${pct(r.contributionPct)}`} strong />
             <Row l="(−) Rateio de despesas fixas" v={brl(-r.fixedPerUnit)} />
             <Row l="Lucro estimado por unidade" v={`${brl(r.profitPerUnit)} · ${pct(r.profitPct)}`} strong />
@@ -162,7 +169,7 @@ export function Calculator(props: {
             <div className="rounded-lg bg-panel2 p-2"><div className="text-mute">ROI</div><div className="text-sm font-semibold">{pct(r.roi)}</div></div>
             <div className="rounded-lg bg-panel2 p-2"><div className="text-mute">Equilíbrio</div><div className="text-sm font-semibold">{be ? brl(be) : "—"}</div></div>
           </div>
-          {r.warnings.map((w) => <p key={w} className="mt-2 text-xs text-amber-300">⚠ {w}</p>)}
+          {r.warnings.map((w) => <p key={w} className="mt-2 text-xs text-warn">⚠ {w}</p>)}
         </Card>
       </div>
 
@@ -192,7 +199,7 @@ export function Calculator(props: {
                 <tr key={t.price} className={t.best ? "bg-brand-green/10" : ""}>
                   <td className={td}>{brl(t.price)} {t.best && <Badge tone="green">melhor equilíbrio</Badge>}</td>
                   <td className={td}>{brl(t.result.fees.total)}</td>
-                  <td className={`${td} ${t.result.contributionMargin < 0 ? "text-red-400" : ""}`}>{brl(t.result.contributionMargin)}</td>
+                  <td className={`${td} ${t.result.contributionMargin < 0 ? "text-bad" : ""}`}>{brl(t.result.contributionMargin)}</td>
                   <td className={td}>{pct(t.result.contributionPct)}</td>
                   <td className={td}>{t.percentile === null ? "—" : `mais caro que ${pct(t.percentile, 0)}`}</td>
                 </tr>
@@ -217,7 +224,7 @@ export function Calculator(props: {
               <td className={td}>{brl(k.res.fees.total)}</td>
               <td className={td}>{brl(k.res.contributionMargin)} <span className="text-xs text-mute">{pct(k.res.contributionPct)}</span></td>
               <td className={td}>{brl(k.res.contributionMargin / k.u)}</td>
-              <td className={`${td} ${k.res.contributionMargin - k.separate >= 0 ? "text-green-400" : "text-red-400"}`}>{k.u === 1 ? "—" : brl(k.res.contributionMargin - k.separate)}</td>
+              <td className={`${td} ${k.res.contributionMargin - k.separate >= 0 ? "text-ok" : "text-bad"}`}>{k.u === 1 ? "—" : brl(k.res.contributionMargin - k.separate)}</td>
             </tr>
           ))}
         </Table>
@@ -236,7 +243,7 @@ export function Calculator(props: {
                   <td className={td}>{brl(sc.input.unitCost)}</td>
                   <td className={td}>{sc.input.monthlyVolume}</td>
                   <td className={td}>{brl(sc.result.contributionMargin)}</td>
-                  <td className={`${td} font-semibold ${sc.result.monthlyNetProfit >= 0 ? "text-green-400" : "text-red-400"}`}>{brl(sc.result.monthlyNetProfit)}</td>
+                  <td className={`${td} font-semibold ${sc.result.monthlyNetProfit >= 0 ? "text-ok" : "text-bad"}`}>{brl(sc.result.monthlyNetProfit)}</td>
                 </tr>
               );
             })}
@@ -264,7 +271,7 @@ export function Calculator(props: {
                     <td className={td}>{brl(x.revenueAfterDiscount * v)}</td>
                     <td className={td}>{brl(x.monthlyContribution)}</td>
                     <td className={td}>{brl(inp.fixedMonthly)}</td>
-                    <td className={`${td} font-semibold ${x.monthlyNetProfit >= 0 ? "text-green-400" : "text-red-400"}`}>{brl(x.monthlyNetProfit)}</td>
+                    <td className={`${td} font-semibold ${x.monthlyNetProfit >= 0 ? "text-ok" : "text-bad"}`}>{brl(x.monthlyNetProfit)}</td>
                     <td className={td}>{brl((x.productCost + inp.packagingCost) * v)}</td>
                   </tr>
                 );
@@ -295,7 +302,7 @@ export function Calculator(props: {
           ].map(([l, v]) => (
             <div key={l} className="rounded-lg bg-panel2 p-3">
               <div className="text-[11px] uppercase text-mute">{l}</div>
-              <div className={`mt-1 text-sm font-semibold ${l === "Lucro do lote" ? (lotSim.profit >= 0 ? "text-green-400" : "text-red-400") : ""}`}>{v}</div>
+              <div className={`mt-1 text-sm font-semibold ${l === "Lucro do lote" ? (lotSim.profit >= 0 ? "text-ok" : "text-bad") : ""}`}>{v}</div>
             </div>
           ))}
         </div>

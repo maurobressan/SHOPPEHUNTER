@@ -1,4 +1,4 @@
-# Shopee Hunter Pro
+# Shoppe Hunter
 
 SaaS de inteligência comercial para vendedores da Shopee Brasil: tendências, concorrência, fornecedores e lucro real por venda com as tarifas oficiais.
 

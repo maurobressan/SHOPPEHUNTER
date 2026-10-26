@@ -1,6 +1,6 @@
 @echo off
 chcp 65001 >nul
-title Shopee Hunter Pro
+title Shoppe Hunter
 cd /d "%~dp0"
 rem Usa a copia portatil do Node.js em tools\node; se nao houver, a instalada no Windows
 if exist "%~dp0tools\node\npm.cmd" set "PATH=%~dp0tools\node;%PATH%"

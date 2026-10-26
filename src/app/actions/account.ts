@@ -47,7 +47,7 @@ export async function inviteMember(f: FormData) {
   const token = newToken();
   await prisma.invite.create({ data: { accountId: ctx.accountId, email, role, tokenHash: sha256(token), expiresAt: new Date(Date.now() + 7 * 86400000) } });
   const link = `${appUrl()}/convite/${token}`;
-  const sent = await sendEmail(email, `Convite para ${ctx.accountName} — Shopee Hunter Pro`, `<p>${ctx.user.name} convidou você para a conta <b>${ctx.accountName}</b>.</p><p><a href="${link}">Aceitar convite</a> (válido por 7 dias)</p>`);
+  const sent = await sendEmail(email, `Convite para ${ctx.accountName} — Shoppe Hunter`, `<p>${ctx.user.name} convidou você para a conta <b>${ctx.accountName}</b>.</p><p><a href="${link}">Aceitar convite</a> (válido por 7 dias)</p>`);
   revalidatePath("/conta");
   back("/conta", "ok", sent ? `Convite enviado para ${email}.` : `Convite criado. Envie este link para ${email} (válido por 7 dias): ${link}`);
 }

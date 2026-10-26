@@ -30,6 +30,6 @@ $("save").onclick = async () => {
     msg.style.color = r.ok ? "#22c55e" : "#f87171";
     msg.textContent = r.ok ? `Conectado! Plano ${d.plan}, ${d.products.length} produto(s).` : d.error || "Erro " + r.status;
   } catch {
-    msg.innerHTML = `<span style="color:#f87171">Não foi possível conectar. O Shopee Hunter Pro está aberto?</span>`;
+    msg.innerHTML = `<span style="color:#f87171">Não foi possível conectar. O Shoppe Hunter está aberto?</span>`;
   }
 };

@@ -7,7 +7,7 @@ export default function Privacidade() {
   return (
     <article className="md mx-auto max-w-3xl px-4 py-14 sm:px-6">
       <h1>Política de Privacidade</h1>
-      <p>{empresa} é a controladora dos dados pessoais tratados no Shopee Hunter Pro.</p>
+      <p>{empresa} é a controladora dos dados pessoais tratados no Shoppe Hunter.</p>
       <h2>Dados que coletamos</h2>
       <ul>
         <li>Cadastro: nome, e-mail e senha (armazenada apenas como hash).</li>

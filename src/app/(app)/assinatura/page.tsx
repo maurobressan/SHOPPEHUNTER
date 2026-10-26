@@ -29,7 +29,7 @@ export default async function Assinatura({ searchParams }: { searchParams: Promi
     return (
       <div key={label}>
         <div className="flex justify-between text-xs text-mute"><span>{label}</span><span>{used} / {limit < 0 ? "ilimitado" : limit}</span></div>
-        <div className="mt-1 h-2 rounded bg-panel2"><div className={`h-full rounded ${pctUsed >= 100 ? "bg-red-400" : "bg-brand-green"}`} style={{ width: `${limit < 0 ? 5 : pctUsed}%` }} /></div>
+        <div className="mt-1 h-2 rounded bg-panel2"><div className={`h-full rounded ${pctUsed >= 100 ? "bg-bad" : "bg-brand-green"}`} style={{ width: `${limit < 0 ? 5 : pctUsed}%` }} /></div>
       </div>
     );
   };
@@ -46,7 +46,7 @@ export default async function Assinatura({ searchParams }: { searchParams: Promi
               <div>Situação: <Badge tone={STATUS[sub.status]?.[1] ?? "amber"}>{STATUS[sub.status]?.[0] ?? sub.status}</Badge></div>
               {sub.status === "trialing" && sub.trialEndsAt && <div>Teste até {date(sub.trialEndsAt)}. Depois disso, a conta volta ao plano Grátis se não houver assinatura.</div>}
               {sub.currentPeriodEnd && <div>{sub.cancelAtPeriodEnd ? "Acesso até" : "Próxima renovação"}: {date(sub.currentPeriodEnd)}</div>}
-              {sub.planId !== ctx.planId && <div className="text-amber-300">Assinatura de {sub.planId} sem acesso vigente — usando {ctx.planName}.</div>}
+              {sub.planId !== ctx.planId && <div className="text-warn">Assinatura de {sub.planId} sem acesso vigente — usando {ctx.planName}.</div>}
             </div>
           )}
           {sub?.providerCustomerId && billing && ctx.role !== "member" && (
