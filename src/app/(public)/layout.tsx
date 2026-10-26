@@ -10,20 +10,20 @@ export default async function PublicLayout({ children }: { children: React.React
   const ctx = await getCtx();
   return (
     <div className="theme-light flex min-h-screen flex-col bg-bg text-ink">
-      <header className="sticky top-0 z-30 border-b border-line/70 bg-white/85 backdrop-blur-md">
+      <header className="sticky top-0 z-30 border-b border-white/10 bg-[#0b1e4f]/95 backdrop-blur-md">
         <div className="mx-auto flex h-16 max-w-6xl items-center gap-4 px-4 sm:px-6">
           <Link href="/" aria-label={BRAND_NAME}>
-            <Logo size={36} />
+            <Logo dark size={36} />
           </Link>
           <nav className="ml-auto flex items-center gap-1 text-sm font-semibold sm:gap-2">
-            <Link href="/#recursos" className="hidden rounded-lg px-3 py-2 text-mute hover:text-ink md:inline">Recursos</Link>
-            <Link href="/#como-funciona" className="hidden rounded-lg px-3 py-2 text-mute hover:text-ink md:inline">Como funciona</Link>
-            <Link href="/precos" className="hidden rounded-lg px-3 py-2 text-mute hover:text-ink sm:inline">Preços</Link>
+            <Link href="/#recursos" className="hidden rounded-lg px-3 py-2 text-white/70 hover:text-white md:inline">Recursos</Link>
+            <Link href="/#como-funciona" className="hidden rounded-lg px-3 py-2 text-white/70 hover:text-white md:inline">Como funciona</Link>
+            <Link href="/precos" className="hidden rounded-lg px-3 py-2 text-white/70 hover:text-white sm:inline">Preços</Link>
             {ctx ? (
               <Link href="/painel" className={btnPrimary}>Abrir painel</Link>
             ) : (
               <>
-                <Link href="/login" className="rounded-lg px-3 py-2 text-mute hover:text-ink">Entrar</Link>
+                <Link href="/login" className="rounded-lg px-3 py-2 text-white/70 hover:text-white">Entrar</Link>
                 <Link href="/cadastro" className={`${btnPrimary} hidden sm:inline-flex`}>Começar grátis</Link>
               </>
             )}
@@ -31,7 +31,7 @@ export default async function PublicLayout({ children }: { children: React.React
         </div>
       </header>
       <main className="flex-1">{children}</main>
-      <footer className="bg-brand-navy text-white/70">
+      <footer className="border-t border-white/10 bg-[#081633] text-white/70">
         <div className="mx-auto grid max-w-6xl gap-8 px-4 py-12 sm:px-6 md:grid-cols-[1.4fr_1fr_1fr]">
           <div>
             <Logo dark size={40} />

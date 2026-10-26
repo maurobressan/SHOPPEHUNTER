@@ -21,14 +21,14 @@ export default async function Vendas({ searchParams }: { searchParams: Promise<S
 
   return (
     <>
-      <PageHeader title="Minhas Vendas" subtitle="Importe as planilhas de pedidos da sua loja. Funciona sem nenhuma integração externa.">
-        <div className="flex rounded-lg border border-line bg-panel p-1">
-          {[7, 30, 90].map((d) => <Link key={d} href={`/vendas?dias=${d}`} className={`rounded-md px-3 py-1 text-sm ${d === dias ? "bg-brand-blue/20 text-brand-blue" : "text-mute"}`}>{d} dias</Link>)}
+      <PageHeader title="Minhas vendas" subtitle="Exporte a planilha de pedidos no Centro do Vendedor da Shopee e envie aqui: o Hunter calcula faturamento, taxas e lucro por produto.">
+        <div className="flex rounded-xl border border-line bg-panel p-1 shadow-sm">
+          {[7, 30, 90].map((d) => <Link key={d} href={`/vendas?dias=${d}`} className={`rounded-lg px-3 py-1 text-sm font-medium ${d === dias ? "bg-brand-blue text-white" : "text-mute hover:text-ink"}`}>{d} dias</Link>)}
         </div>
         {rep && <a href={`/api/vendas/export?dias=${dias}`} className={btnGhost}>Exportar CSV</a>}
       </PageHeader>
       <Flash sp={sp} />
-      <Importer />
+      <div id="importar" className="scroll-mt-24"><Importer /></div>
       {!rep ? (
         <div className="mt-6"><Empty title="Nenhum pedido importado">Importe a planilha de pedidos exportada do Centro do Vendedor.</Empty></div>
       ) : (

@@ -4,7 +4,7 @@ import Image from "next/image";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import {
-  LayoutDashboard, Search, Trophy, Radar, Swords, Truck, Calculator, Bookmark, Bot, Settings, FileSpreadsheet, Menu, X, Bell, GitCompare, CreditCard, UserCircle, Shield, LogOut, ChevronDown, Sparkles,
+  LayoutDashboard, Search, Trophy, Radar, Swords, Truck, Calculator, Bookmark, Bot, Settings, FileSpreadsheet, Menu, X, Bell, GitCompare, CreditCard, UserCircle, Shield, LogOut, ChevronDown, Sparkles, FileUp,
 } from "lucide-react";
 import { signOut, switchAccount } from "@/app/actions/auth";
 import { Logo } from "./Brand";
@@ -36,7 +36,7 @@ const GROUPS: { title: string; items: Item[] }[] = [
     title: "Minha loja",
     items: [
       { href: "/meus-produtos", label: "Meus produtos", icon: Bookmark, hint: "Produtos monitorados" },
-      { href: "/vendas", label: "Minhas vendas", icon: FileSpreadsheet, hint: "Planilha da Shopee" },
+      { href: "/vendas", label: "Vendas e planilha", icon: FileSpreadsheet, hint: "Importar planilha da Shopee" },
       { href: "/alertas", label: "Alertas", icon: Bell, hint: "Preço e margem" },
       { href: "/assistente", label: "Assistente IA", icon: Bot, hint: "Relatórios" },
     ],
@@ -212,6 +212,9 @@ function Topbar({ title, unread, user, onMenu }: { title: string; unread: number
         </form>
 
         <div className="ml-auto flex items-center gap-1">
+          <Link href="/vendas#importar" className="mr-1 hidden items-center gap-2 rounded-xl bg-brand-blue/10 px-3 py-2 text-sm font-semibold text-brand-blue transition hover:bg-brand-blue/15 md:inline-flex">
+            <FileUp size={17} /> Importar planilha
+          </Link>
           <Link href="/explorar" aria-label="Buscar" className={`${iconBtn} sm:hidden`}><Search size={19} /></Link>
           <ThemeToggle className={iconBtn} />
           <Link href="/alertas" aria-label={`Alertas${unread ? `: ${unread} novos` : ""}`} className={iconBtn}>

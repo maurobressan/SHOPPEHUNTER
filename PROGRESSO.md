@@ -37,3 +37,6 @@ Calculadora com tarifas oficiais (out/2026), cálculo reverso, kits, cenários; 
 - Menu lateral agrupado (Descobrir, Analisar, Minha loja, Conta), barra superior com busca, alertas e menu do usuário; atalhos rápidos e progresso dos primeiros passos no painel.
 - Página inicial, preços e login redesenhados; calculadora com o lucro por venda em destaque.
 
+- Página inicial com fundo colorido (azul-marinho e tons de azul), fotos de pessoas (Unsplash, licença gratuita) e ilustrações das telas marcadas como dados de exemplo. Fundo da área logada levemente azulado.
+- Importação da planilha mais fácil de achar: botão 'Importar planilha' na barra superior, item 'Vendas e planilha' no menu e passo a passo de como exportar no Centro do Vendedor.
+

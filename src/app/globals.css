@@ -6,10 +6,10 @@
    Valores em canais RGB para o Tailwind aplicar transparência (ex.: bg-ok/10). */
 :root,
 .theme-light {
-  --bg: 245 247 251;
+  --bg: 228 237 250;
   --panel: 255 255 255;
-  --panel2: 239 243 250;
-  --line: 224 230 240;
+  --panel2: 238 243 251;
+  --line: 216 225 240;
   --ink: 15 27 61;
   --mute: 92 106 138;
   --side: 11 30 79;

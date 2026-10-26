@@ -2,6 +2,7 @@
 import { useActionState, useRef, useState } from "react";
 import { importOrders, type PreviewState } from "@/app/actions/app";
 import { FIELDS, type FieldKey, type Mapping } from "@/lib/import/orders";
+import { FileUp } from "lucide-react";
 import { Card, Notice, btnPrimary, btnGhost, input, Table, td } from "@/components/ui";
 
 export function Importer() {
@@ -13,7 +14,19 @@ export function Importer() {
   const map = mapping ?? state.mapping ?? {};
 
   return (
-    <Card title="Importar planilha do Centro do Vendedor">
+    <Card title={<span className="flex items-center gap-2"><FileUp size={18} className="text-brand-blue" /> Importar planilha de vendas da Shopee</span>}>
+      <ol className="mb-5 grid gap-3 md:grid-cols-3">
+        {[
+          ["Entre no Centro do Vendedor", "seller.shopee.com.br, com a sua conta da loja."],
+          ["Minhas Vendas → Exportar", "Escolha o período e baixe o arquivo .xlsx dos pedidos."],
+          ["Envie o arquivo aqui", "O Hunter lê as colunas sozinho; você só confere e confirma."],
+        ].map(([t, d], i) => (
+          <li key={t} className="flex gap-3 rounded-xl bg-panel2/70 p-3">
+            <span className="grid h-7 w-7 shrink-0 place-items-center rounded-full bg-brand-blue text-xs font-bold text-white">{i + 1}</span>
+            <span><span className="block text-sm font-semibold text-ink">{t}</span><span className="block text-xs text-mute">{d}</span></span>
+          </li>
+        ))}
+      </ol>
       <form
         action={(fd) => {
           if (fileRef.current) fd.set("file", fileRef.current);
@@ -22,7 +35,10 @@ export function Importer() {
         }}
         className="space-y-4"
       >
-        <div className="flex flex-wrap items-center gap-3">
+        <label className="flex cursor-pointer flex-col items-center justify-center gap-2 rounded-2xl border-2 border-dashed border-brand-blue/30 bg-brand-blue/[0.04] px-4 py-8 text-center transition hover:border-brand-blue/60 hover:bg-brand-blue/[0.07]">
+          <span className="grid h-12 w-12 place-items-center rounded-2xl bg-gradient-to-br from-[#1565ff] to-[#18c8e8] text-white shadow-sm"><FileUp size={22} /></span>
+          <span className="text-sm font-semibold text-ink">{fileName ? fileName : "Clique para escolher a planilha"}</span>
+          <span className="text-xs text-mute">{fileName ? "clique para trocar o arquivo" : ".xlsx ou .csv exportado do Centro do Vendedor"}</span>
           <input
             type="file"
             name="file"
@@ -32,16 +48,17 @@ export function Importer() {
               setFileName(fileRef.current?.name ?? "");
               setMapping(null);
             }}
-            className="text-sm text-mute file:mr-3 file:rounded-lg file:border-0 file:bg-panel2 file:px-3 file:py-2 file:text-ink"
+            className="sr-only"
           />
-          {fileName && <span className="text-xs text-mute">selecionado: {fileName}</span>}
-          <button name="step" value="preview" className={btnGhost} disabled={pending}>1. Ler e detectar colunas</button>
+        </label>
+        <div className="flex flex-wrap items-center gap-3">
+          <button name="step" value="preview" className={state.headers && !state.result ? btnGhost : btnPrimary} disabled={pending || !fileName}>1. Ler e detectar colunas</button>
           {state.headers && !state.result && (
             <button name="step" value="commit" className={btnPrimary} disabled={pending}>2. Confirmar importação</button>
           )}
           {pending && <span className="text-sm text-mute">Processando…</span>}
         </div>
-        <p className="text-xs text-mute">Centro do Vendedor → Minhas Vendas → Exportar (.xlsx). Também aceita CSV. Arquivos .xls antigos: salve como .xlsx. Pedidos já importados são ignorados automaticamente (controle de duplicidade).</p>
+        <p className="text-xs text-mute">Arquivos .xls antigos: abra e salve como .xlsx. Pedidos já importados são ignorados automaticamente, então pode enviar planilhas com períodos repetidos.</p>
         {state.error && <Notice tone="red">{state.error}</Notice>}
         {state.result && (
           <Notice tone="green">
