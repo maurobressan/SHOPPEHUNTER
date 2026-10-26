@@ -21,3 +21,5 @@ coleta.log
 .vercel
 
 segredos*.txt
+.env*
+!.env.example
