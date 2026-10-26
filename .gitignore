@@ -1,0 +1,23 @@
+# dependências e builds
+node_modules
+.next
+*.tsbuildinfo
+next-env.d.ts
+
+# Node.js portátil (só para rodar no Windows local)
+tools
+
+# banco local e segredos — NUNCA enviar ao GitHub
+*.db
+*.db-journal
+.env
+.env.*
+!.env.example
+
+# logs e configurações locais
+coleta.log
+*.log
+.claude
+.vercel
+
+segredos*.txt

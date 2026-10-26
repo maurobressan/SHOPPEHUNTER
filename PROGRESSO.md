@@ -1,0 +1,32 @@
+# Shopee Hunter Pro — Progresso
+
+## Como usar (no seu computador)
+- **Abrir:** dois cliques em `iniciar.bat`. Deixe a janela preta aberta e use o navegador (http://localhost:3000).
+- **Primeiro acesso:** clique em *Começar grátis* e crie sua conta. **O primeiro usuário vira administrador da plataforma.**
+- **Ver com dados fictícios:** Configurações → *Ativar DEMO*.
+- **Extensão do Chrome:** Minha conta → Extensão (passo a passo e token). Pasta `extensao`.
+- **Colocar à venda na internet:** veja `DEPLOY.md`.
+- Testes: `npm test` (53 testes).
+
+## Versão 2 — SaaS (26/10/2026)
+- **Contas e acesso:** cadastro, login, sessões seguras (cookie httpOnly, senha com scrypt), recuperação de senha, limite de tentativas, troca de conta, equipe com convites e papéis (dono/administrador/membro).
+- **Multi-cliente:** todos os dados têm `accountId`; cada página e ação verifica a sessão e filtra pela conta (testado: um cliente recebe 404 nos produtos de outro).
+- **Planos e limites:** Grátis / Pro / Business editáveis no Admin (preço, limites, recursos). Teste grátis de 7 dias do Pro. Limites aplicados em produtos, relatórios/mês, importações/mês, usuários, coleta automática, extensão, alertas e IA.
+- **Cobrança:** Stripe Checkout + Portal do cliente + webhook que sincroniza a assinatura. Sem Stripe configurado, o admin altera planos manualmente.
+- **Administração:** clientes, plano efetivo, MRR, pagantes, testes, edição de planos/preços, tabelas de comissão globais versionadas, status das integrações.
+- **Site público:** página de vendas, preços, perguntas frequentes, Termos de Uso e Política de Privacidade (modelos LGPD — revisar com advogado).
+- **LGPD:** exportação de todos os dados (JSON) e exclusão da conta.
+- **Extensão “Salvar no Hunter” (Chrome):** lê o anúncio aberto na Shopee (só a página visível), mostra tarifas e margem na hora, campos editáveis, salva no produto com 1 clique (1 registro por anúncio por dia).
+- **Novos recursos:** simulador de compra de lote com fluxo de caixa (prazo de repasse da Shopee, dia de retorno do dinheiro, ROI mensalizado); alertas automáticos (queda de preço de concorrente, novo concorrente, margem baixa); comparação lado a lado de até 4 produtos; relatório do produto para imprimir/PDF; checklist de primeiros passos.
+- **Coleta:** por conta, apenas para planos com coleta; cron do servidor em `/api/cron/coletar`.
+
+## Versão 1 — base analítica
+Calculadora com tarifas oficiais (out/2026), cálculo reverso, kits, cenários; importação de planilhas do Centro do Vendedor; tendências por snapshots; concorrência; fornecedores e cotações; Hunter Score; relatório por regras + IA opcional. Detalhes da pesquisa de taxas e APIs: [política oficial](https://seller.shopee.com.br/edu/article/26839).
+
+## Limitações e pendências
+- API de Afiliados implementada conforme documentação pública, **ainda não testada com credenciais reais**. Confirmar com a Shopee se o uso num serviço pago é permitido (ver DEPLOY.md).
+- A extensão lê o texto da página; se a Shopee mudar o layout, os campos podem vir vazios (o usuário corrige à mão antes de salvar). Não foi testada numa página real da Shopee nesta sessão.
+- Pagamento testado apenas na lógica (sem chaves Stripe reais).
+- Preços dos planos (R$ 49,90 e R$ 99,90) são provisórios — ajuste em Administração → Planos.
+- Termos e Privacidade são modelos: revisão jurídica obrigatória antes de vender.
+- Limitador de tentativas de login fica na memória do servidor (trocar por Redis se usar várias instâncias).

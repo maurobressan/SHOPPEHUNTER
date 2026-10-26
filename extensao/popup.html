@@ -1,0 +1,26 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<style>
+  body { width: 300px; margin: 0; padding: 14px; font: 13px system-ui, Segoe UI, sans-serif; background: #0b1020; color: #e6ebf5; }
+  h1 { font-size: 15px; margin: 0 0 10px; }
+  label { display: block; font-size: 11px; color: #8b97b3; margin: 8px 0 3px; }
+  input { width: 100%; box-sizing: border-box; background: #111830; color: #e6ebf5; border: 1px solid #24304f; border-radius: 8px; padding: 7px 8px; }
+  button { width: 100%; margin-top: 12px; padding: 9px; border: 0; border-radius: 9px; font-weight: 600; cursor: pointer; background: linear-gradient(90deg,#22c55e,#06b6d4); color: #0b1020; }
+  #msg { margin-top: 8px; font-size: 12px; }
+  p { color: #8b97b3; font-size: 11px; }
+</style>
+</head>
+<body>
+  <h1>Shopee Hunter Pro</h1>
+  <label>Endereço do Shopee Hunter Pro</label>
+  <input id="url" placeholder="http://localhost:3000">
+  <label>Token (Minha conta → Extensão)</label>
+  <input id="token" placeholder="shp_...">
+  <button id="save">Salvar e testar</button>
+  <div id="msg"></div>
+  <p>Depois, abra um anúncio em shopee.com.br. O painel aparece no canto inferior direito.</p>
+  <script src="popup.js"></script>
+</body>
+</html>
