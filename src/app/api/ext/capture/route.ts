@@ -37,7 +37,7 @@ export async function POST(req: Request) {
   const now = new Date();
   const dayStart = new Date(now.getFullYear(), now.getMonth(), now.getDate());
   const today = await prisma.snapshot.findFirst({ where: { listingId: listing.id, source: "extensao", collectedAt: { gte: dayStart } } });
-  const data = { price: d.price, priceMax: d.priceMax, salesCumulative: d.sold, ratingStar: d.ratingStar, ratingCount: d.ratingCount, referenceDate: now, collectedAt: now, reliability: "media", raw: JSON.stringify(d) };
+  const data = { price: d.price, priceMax: d.priceMax, salesCumulative: d.sold, ratingStar: d.ratingStar, ratingCount: d.ratingCount, referenceDate: now, collectedAt: now, reliability: d.soldApprox ? "baixa" : "media", raw: JSON.stringify(d) };
   if (today) await prisma.snapshot.update({ where: { id: today.id }, data });
   else await prisma.snapshot.create({ data: { ...data, listingId: listing.id, source: "extensao" } });
 

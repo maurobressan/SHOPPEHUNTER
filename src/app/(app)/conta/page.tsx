@@ -85,14 +85,19 @@ export default async function Conta({ searchParams }: { searchParams: Promise<SP
         )}
         <div className="grid gap-6 lg:grid-cols-2">
           <div className="text-sm text-mute">
-            <p>Enquanto você navega na Shopee, a extensão lê o que está na tela do anúncio (preço, “vendidos”, nota, loja) e mostra na hora as tarifas e a margem estimada. Com um clique, salva o anúncio no seu produto para acompanhar a evolução.</p>
-            <ol className="mt-3 list-decimal space-y-1 pl-5">
-              <li>No Chrome, abra <code>chrome://extensions</code> e ative o <b>Modo do desenvolvedor</b>.</li>
-              <li>Clique em <b>Carregar sem compactação</b> e escolha a pasta <code>extensao</code> do Shoppe Hunter.</li>
-              <li>Clique no ícone da extensão, informe o endereço <code>{appUrl()}</code> e o token gerado aqui.</li>
-              <li>Abra um anúncio na shopee.com.br: o painel do Hunter aparece no canto da tela.</li>
+            <p>Com a extensão, você entra na Shopee com a sua conta normalmente e o Hunter lê o que está na tela:</p>
+            <ul className="mt-2 list-disc space-y-1 pl-5">
+              <li><b className="text-ink">Na busca, categoria ou loja:</b> cada anúncio ganha um selo com os vendidos, e um painel mostra os mais vendidos, o preço mediano e a tarifa. Um botão salva todos como concorrentes.</li>
+              <li><b className="text-ink">No anúncio:</b> tarifas, margem e, se você já salvou antes, quantas vendas ele fez entre um registro e outro.</li>
+            </ul>
+            <ol className="mt-4 list-decimal space-y-1.5 pl-5">
+              <li><a href="/shoppe-hunter-extensao.zip" download className="font-semibold text-brand-blue hover:underline">Baixe a extensão (.zip)</a> e descompacte numa pasta.</li>
+              <li>No Chrome, abra <code>chrome://extensions</code> e ative o <b>Modo do desenvolvedor</b> (canto superior direito).</li>
+              <li>Clique em <b>Carregar sem compactação</b> e escolha a pasta descompactada.</li>
+              <li>Gere um token aqui ao lado, clique no ícone do Shoppe Hunter no Chrome, cole o token e clique em <b>Salvar e testar</b>. O endereço já vem preenchido: <code>{appUrl()}</code>.</li>
+              <li>Entre na shopee.com.br e faça uma busca: os selos aparecem nos anúncios.</li>
             </ol>
-            <p className="mt-3 text-xs">A extensão não acessa endereços internos da Shopee nem faz buscas automáticas: lê apenas a página que você está vendo.</p>
+            <p className="mt-3 text-xs">“Vendidos” é o total desde a criação do anúncio, como a Shopee mostra. Para saber as vendas da semana ou do mês, salve os anúncios e volte em outros dias: o Hunter calcula pela diferença. A extensão não acessa endereços internos da Shopee nem faz buscas sozinha: lê só a página que você está vendo.</p>
           </div>
           <div>
             <Table head={["Nome", "Início", "Último uso", ""]}>

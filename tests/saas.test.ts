@@ -90,6 +90,16 @@ describe("integração com a extensão", () => {
     expect(t2.soldApprox).toBe(false);
   });
 
+  it("lê os cartões de uma busca: vendidos totais, por mês e arredondados", () => {
+    const P = (g as unknown as { HunterParse: { parseCard: (t: string, h: string, a?: string) => Record<string, unknown> } }).HunterParse;
+    const a = P.parseCard("Indicado\n-20%\nGarrafa Térmica Inox 1L Café\nR$\n29,90\n1,2mil vendidos\nSão Paulo", "https://shopee.com.br/Garrafa-i.11.22");
+    expect(a).toMatchObject({ shopId: "11", itemId: "22", title: "Garrafa Térmica Inox 1L Café", price: 29.9, sold: 1200, soldMonthly: null, soldApprox: true });
+    const b = P.parseCard("Copo térmico 500ml\nR$ 19,90\n85 vendidos/mês", "https://shopee.com.br/product/7/8", "Copo térmico 500ml com tampa");
+    expect(b).toMatchObject({ title: "Copo térmico 500ml com tampa", price: 19.9, sold: null, soldMonthly: 85, soldApprox: false });
+    const c = P.parseCard("Luminária LED de mesa\nR$ 45,00", "https://shopee.com.br/Lum-i.1.2");
+    expect(c).toMatchObject({ sold: null, soldMonthly: null });
+  });
+
   it("identifica página de anúncio e limpa o título", () => {
     expect(g.HunterParse.isProductUrl("https://shopee.com.br/Garrafa-i.123.456")).toBe(true);
     expect(g.HunterParse.isProductUrl("https://shopee.com.br/search?keyword=x")).toBe(false);

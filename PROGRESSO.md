@@ -40,3 +40,5 @@ Calculadora com tarifas oficiais (out/2026), cálculo reverso, kits, cenários; 
 - Página inicial com fundo colorido (azul-marinho e tons de azul), fotos de pessoas (Unsplash, licença gratuita) e ilustrações das telas marcadas como dados de exemplo. Fundo da área logada levemente azulado.
 - Importação da planilha mais fácil de achar: botão 'Importar planilha' na barra superior, item 'Vendas e planilha' no menu e passo a passo de como exportar no Centro do Vendedor.
 
+- Extensão 1.1: nas buscas, categorias e lojas da Shopee cada anúncio ganha um selo com os vendidos (e as vendas medidas, se já acompanhado); painel com mais vendidos, preço mediano e tarifa; botão para salvar todos os anúncios da página como concorrentes. Vendas 'por mês' não são tratadas como total. Rota /api/ext/lookup. Endereço padrão = site publicado. Download em /shoppe-hunter-extensao.zip (gerar de novo com Compress-Archive quando a extensão mudar).
+

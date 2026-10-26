@@ -27,6 +27,8 @@ export const captureSchema = z.object({
   price: z.number().positive().max(1e6).nullable(),
   priceMax: z.number().positive().max(1e6).nullable().default(null),
   sold: z.number().int().min(0).max(1e9).nullable(),
+  // a Shopee arredonda números grandes ("1,2mil vendidos"); nesse caso o registro tem confiabilidade baixa
+  soldApprox: z.boolean().default(false),
   ratingStar: z.number().min(0).max(5).nullable(),
   ratingCount: z.number().int().min(0).max(1e9).nullable(),
   productId: z.string().optional(),

@@ -1,7 +1,7 @@
 const $ = (id) => document.getElementById(id);
 
 chrome.storage.sync.get(["appUrl", "token"]).then(({ appUrl, token }) => {
-  $("url").value = appUrl || "http://localhost:3000";
+  $("url").value = appUrl || "https://shoppehunter.vercel.app";
   $("token").value = token || "";
 });
 
@@ -18,7 +18,7 @@ $("save").onclick = async () => {
   }
   // permissão para acessar o endereço informado (pedido pelo próprio Chrome)
   const granted = await chrome.permissions.request({ origins: [origin + "/*"] }).catch(() => false);
-  if (!granted && !origin.startsWith("http://localhost:3000")) {
+  if (!granted && origin !== "https://shoppehunter.vercel.app" && origin !== "http://localhost:3000") {
     msg.textContent = "Permissão negada para " + origin;
     return;
   }
@@ -30,6 +30,6 @@ $("save").onclick = async () => {
     msg.style.color = r.ok ? "#22c55e" : "#f87171";
     msg.textContent = r.ok ? `Conectado! Plano ${d.plan}, ${d.products.length} produto(s).` : d.error || "Erro " + r.status;
   } catch {
-    msg.innerHTML = `<span style="color:#f87171">Não foi possível conectar. O Shoppe Hunter está aberto?</span>`;
+    msg.innerHTML = `<span style="color:#f87171">Não foi possível conectar. Confira o endereço e a internet.</span>`;
   }
 };

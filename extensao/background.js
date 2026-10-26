@@ -1,12 +1,14 @@
 // Faz as chamadas ao Shoppe Hunter (o content script não chama o servidor diretamente).
+const DEFAULT_URL = "https://shoppehunter.vercel.app";
+
 async function cfg() {
   const { appUrl, token } = await chrome.storage.sync.get(["appUrl", "token"]);
-  return { appUrl: (appUrl || "http://localhost:3000").replace(/\/$/, ""), token: token || "" };
+  return { appUrl: (appUrl || DEFAULT_URL).replace(/\/$/, ""), token: token || "" };
 }
 
 async function call(path, init = {}) {
   const { appUrl, token } = await cfg();
-  if (!token) return { error: "Configure o endereço e o token clicando no ícone da extensão." };
+  if (!token) return { error: "Configure o token clicando no ícone da extensão (Minha conta → Extensão no Shoppe Hunter)." };
   try {
     const r = await fetch(appUrl + path, {
       ...init,
@@ -16,13 +18,14 @@ async function call(path, init = {}) {
     if (!r.ok) return { error: data.error || "Erro " + r.status };
     return data;
   } catch (e) {
-    return { error: "Não foi possível conectar ao Shoppe Hunter em " + appUrl + ". Ele está aberto?" };
+    return { error: "Não foi possível conectar ao Shoppe Hunter em " + appUrl + "." };
   }
 }
 
 chrome.runtime.onMessage.addListener((msg, _sender, reply) => {
   if (msg.type === "context") call("/api/ext/context?url=" + encodeURIComponent(msg.url)).then(reply);
   else if (msg.type === "capture") call("/api/ext/capture", { method: "POST", body: JSON.stringify(msg.payload) }).then(reply);
+  else if (msg.type === "lookup") call("/api/ext/lookup", { method: "POST", body: JSON.stringify({ items: msg.items }) }).then(reply);
   else if (msg.type === "openApp") cfg().then(({ appUrl }) => chrome.tabs.create({ url: appUrl + (msg.path || "/painel") }));
   return true; // resposta assíncrona
 });
