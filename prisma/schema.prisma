@@ -39,6 +39,7 @@ model Account {
   batches      ImportBatch[]
   orderLines   OrderLine[]
   skuCosts     SkuCost[]
+  skuStocks    SkuStock[]
   runs         CollectionRun[]
   alerts       Notification[]
 }
@@ -304,6 +305,18 @@ model SkuCost {
   sku           String
   unitCost      Float
   packagingCost Float   @default(0)
+
+  @@id([accountId, sku])
+}
+
+// Estoque informado pelo vendedor (contagem em countedAt) e prazo do fornecedor, para a reposição.
+model SkuStock {
+  accountId    String
+  account      Account  @relation(fields: [accountId], references: [id], onDelete: Cascade)
+  sku          String
+  quantity     Int
+  leadTimeDays Int      @default(15)
+  countedAt    DateTime @default(now())
 
   @@id([accountId, sku])
 }

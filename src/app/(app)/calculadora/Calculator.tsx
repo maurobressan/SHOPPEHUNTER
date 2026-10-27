@@ -7,6 +7,8 @@ import { Card, Field, input, Table, td, Badge, Notice } from "@/components/ui";
 import { SimpleBars, CashChart } from "@/components/charts";
 import { simulateLot } from "@/lib/cashflow";
 import { brl, pct } from "@/lib/format";
+import { adsBreakEven } from "@/lib/ads";
+import { Megaphone } from "lucide-react";
 
 const parse = (v: string) => {
   const s = v.trim();
@@ -71,12 +73,19 @@ export function Calculator(props: {
   const [lotOther, setLotOther] = useState(0);
   const [lotSales, setLotSales] = useState(Math.max(1, Math.round(props.lot.units / 2)));
   const [payout, setPayout] = useState(props.payoutDelayDays);
+  const [adsTarget, setAdsTarget] = useState(5);
+  const [adsConv, setAdsConv] = useState(0);
+  const [adsCpc, setAdsCpc] = useState(0);
+  const [adsRoas, setAdsRoas] = useState(0);
+  const [adsBudget, setAdsBudget] = useState(0);
   const set = (k: keyof CalcInput) => (n: number) => setInp((s) => ({ ...s, [k]: n }));
   const rules = props.rules[seller];
   const opts = { cpfHighVolume: seller === "CPF" && cpfHigh };
 
   const r = useMemo(() => calculate(inp, rules, opts), [inp, rules, opts.cpfHighVolume]); // eslint-disable-line react-hooks/exhaustive-deps
   const be = useMemo(() => breakEvenPrice(inp, rules, opts), [inp, rules, opts.cpfHighVolume]); // eslint-disable-line react-hooks/exhaustive-deps
+  const noAds = calculate({ ...inp, adsPct: 0 }, rules, opts);
+  const ads = adsBreakEven({ revenue: noAds.revenueAfterDiscount, marginBeforeAds: noAds.contributionMargin, targetProfit: adsTarget, cpc: adsCpc, conversionPct: adsConv, campaignRoas: adsRoas, dailyBudget: adsBudget });
   const pProfit = solvePrice(inp, rules, { kind: "profit", value: targetProfit }, opts);
   const pMargin = solvePrice(inp, rules, { kind: "margin", value: targetMargin }, opts);
   const tests = priceTests(inp, parseList(testPrices), rules, parseList(compPrices), opts);
@@ -173,6 +182,53 @@ export function Calculator(props: {
         </Card>
       </div>
 
+      <Card title={<span className="flex items-center gap-2"><Megaphone size={18} className="text-brand-blue" /> Shopee Ads: quanto posso gastar por venda?</span>}>
+        <div className="grid gap-6 lg:grid-cols-[1fr_1.2fr]">
+          <div>
+            <p className="mb-3 text-sm text-mute">Usa o preço e os custos acima, <b className="text-ink">sem</b> o campo “Anúncios (Ads)”. A comissão da Shopee também incide sobre as vendas vindas de anúncio e já está descontada.</p>
+            <div className="grid grid-cols-2 gap-3">
+              <Num label="Lucro que quero manter por venda" suffix="R$" value={adsTarget} onChange={setAdsTarget} />
+              <Num label="Conversão da campanha" suffix="% dos cliques" value={adsConv} onChange={setAdsConv} hint="opcional, do painel de Ads" />
+              <Num label="CPC médio da campanha" suffix="R$" value={adsCpc} onChange={setAdsCpc} hint="opcional" />
+              <Num label="ROAS atual da campanha" suffix="×" value={adsRoas} onChange={setAdsRoas} hint="opcional" />
+              <Num label="Orçamento diário" suffix="R$" value={adsBudget} onChange={setAdsBudget} hint="opcional" />
+            </div>
+          </div>
+          <div>
+            {ads.maxCostPerSale === null ? (
+              <Notice tone="red">{ads.warnings[0] ?? "Informe preço e custos."}</Notice>
+            ) : (
+              <>
+                <div className="grid grid-cols-2 gap-3">
+                  <div className="rounded-2xl bg-panel2 p-4">
+                    <div className="text-xs font-semibold text-mute">ROAS mínimo (empata)</div>
+                    <div className="text-2xl font-extrabold text-ink">{ads.breakEvenRoas!.toFixed(1).replace(".", ",")}×</div>
+                    <div className="text-xs text-mute">gasto máx. {brl(ads.maxCostPerSale)} por venda · ACOS {pct(ads.breakEvenAcos)}</div>
+                  </div>
+                  <div className="rounded-2xl bg-gradient-to-br from-[#1565ff] to-[#18c8e8] p-4 text-white">
+                    <div className="text-xs font-semibold text-white/85">ROAS alvo (lucro de {brl(adsTarget)})</div>
+                    <div className="text-2xl font-extrabold">{ads.targetRoas ? `${ads.targetRoas.toFixed(1).replace(".", ",")}×` : "—"}</div>
+                    <div className="text-xs text-white/85">{ads.targetCostPerSale !== null ? `gasto máx. ${brl(ads.targetCostPerSale)} por venda` : "lucro desejado acima da margem"}</div>
+                  </div>
+                </div>
+                <div className="mt-3 space-y-1 text-sm">
+                  {ads.maxCpc !== null && <Row l="CPC máximo para manter o lucro" v={brl(ads.maxCpc)} />}
+                  {ads.costPerSaleNow !== null && <Row l="Seu gasto por venda hoje (CPC ÷ conversão)" v={brl(ads.costPerSaleNow)} neg={ads.targetCostPerSale !== null && ads.costPerSaleNow > ads.targetCostPerSale} />}
+                  {ads.campaign && (
+                    <>
+                      <Row l="Vendas por dia vindas do anúncio" v={ads.campaign.salesPerDay.toFixed(1).replace(".", ",")} />
+                      <Row l="Lucro por venda com esse ROAS" v={brl(ads.campaign.profitPerSale)} neg={ads.campaign.profitPerSale < 0} />
+                      <Row l="Resultado por dia da campanha" v={brl(ads.campaign.profitPerDay)} neg={ads.campaign.profitPerDay < 0} strong />
+                    </>
+                  )}
+                </div>
+                <p className="mt-3 text-xs text-mute">Regra: na Shopee, ROAS = vendas do anúncio ÷ gasto. Abaixo do ROAS mínimo, cada venda vinda de anúncio dá prejuízo. Anúncios também trazem vendas orgânicas depois, que este cálculo não conta.</p>
+                {ads.warnings.map((w) => <p key={w} className="mt-2 text-xs text-warn">⚠ {w}</p>)}
+              </>
+            )}
+          </div>
+        </div>
+      </Card>
       <div className="grid gap-6 lg:grid-cols-2">
         <Card title="Simulação reversa">
           <div className="grid grid-cols-2 gap-4">

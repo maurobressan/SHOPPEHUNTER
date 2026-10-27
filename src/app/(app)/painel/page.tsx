@@ -10,13 +10,22 @@ import { Card, PageHeader, Stat, Badge, TrendBadge, RecBadge, Empty, Table, td, 
 import { brl, dateTime, pct, signedPct } from "@/lib/format";
 import { TREND_LABELS, type TrendClass } from "@/lib/trends";
 import { Flash, type SP } from "@/components/Flash";
-import { CheckCircle2, ArrowRight, Calculator, Search, FileSpreadsheet, Truck } from "lucide-react";
+import { CheckCircle2, ArrowRight, Calculator, Search, FileSpreadsheet, BadgeCheck, PackageCheck } from "lucide-react";
+import { restockPlan } from "@/lib/restock";
+
+async function restockSummary(accountId: string) {
+  const stocks = await prisma.skuStock.findMany({ where: { accountId } });
+  if (!stocks.length) return 0;
+  const lines = await prisma.orderLine.findMany({ where: { accountId }, select: { sku: true, productName: true, orderDate: true, status: true, quantity: true } });
+  const plan = restockPlan(lines, Object.fromEntries(stocks.map((x) => [x.sku, { quantity: x.quantity, leadTimeDays: x.leadTimeDays, countedAt: x.countedAt }])));
+  return plan.rows.filter((r) => r.status === "sem_estoque" || r.status === "pedir_agora").length;
+}
 
 // Atalhos para as tarefas mais comuns, logo no topo do painel.
 const QUICK = [
   { href: "/calculadora", label: "Calcular lucro", text: "Taxas oficiais da Shopee", icon: Calculator, color: "from-[#1565ff] to-[#3b82f6]" },
   { href: "/explorar", label: "Explorar produtos", text: "Pesquisar anúncios", icon: Search, color: "from-[#0aa5c8] to-[#18c8e8]" },
-  { href: "/fornecedores", label: "Fornecedores", text: "Registrar cotação", icon: Truck, color: "from-[#16a050] to-[#3ddc84]" },
+  { href: "/vale-a-pena", label: "Vale a pena?", text: "Veredito do produto", icon: BadgeCheck, color: "from-[#16a050] to-[#3ddc84]" },
   { href: "/vendas#importar", label: "Importar planilha", text: "Vendas da sua loja", icon: FileSpreadsheet, color: "from-[#0b1e4f] to-[#1565ff]" },
 ];
 
@@ -49,6 +58,7 @@ export default async function Painel({ searchParams }: { searchParams: Promise<S
   ];
   const showOnboarding = !settings.onboardingDismissed && steps.some((x) => !x.done);
   const doneCount = steps.filter((x) => x.done).length;
+  const restock = await restockSummary(ctx.accountId);
 
   return (
     <>
@@ -56,6 +66,11 @@ export default async function Painel({ searchParams }: { searchParams: Promise<S
         <Link href="/meus-produtos" className={btnPrimary}>+ Analisar produto</Link>
       </PageHeader>
       <Flash sp={sp} />
+      {restock > 0 && (
+        <Link href="/estoque" className="mb-6 flex items-center gap-3 rounded-2xl border border-bad/30 bg-bad/[0.06] px-4 py-3 text-sm font-semibold text-bad transition hover:bg-bad/10">
+          <PackageCheck size={18} /> {restock} SKU(s) precisam de reposição agora. Ver estoque <ArrowRight size={16} className="ml-auto" />
+        </Link>
+      )}
 
       {showOnboarding && (
         <Card

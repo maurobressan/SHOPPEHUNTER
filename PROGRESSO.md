@@ -44,3 +44,5 @@ Calculadora com tarifas oficiais (out/2026), cálculo reverso, kits, cenários; 
 
 - Extensão 1.2: página /extensao no site com detecção da extensão e botão 'Conectar extensão' (sem copiar token; o site entrega o token por window.postMessage a um script da extensão que só roda no domínio do Hunter). Login volta para a página pedida (?next=). Pasta loja-chrome/ com pacote, imagens e textos para a Chrome Web Store; 'npm run ext:pack' gera os dois .zip. Depois de aprovada, definir NEXT_PUBLIC_EXTENSION_URL na Vercel.
 
+- Novos recursos (27/10/2026): 'Vale a pena?' (/vale-a-pena, veredito em semáforo baseado no Hunter Score, com a regra de cada item e próximos passos; aceita link do anúncio); Shopee Ads na calculadora (ROAS mínimo e alvo, ACOS, CPC máximo, resultado da campanha — src/lib/ads.ts); Estoque e reposição (/estoque, modelo SkuStock + migração 20261027000000_sku_stock, ritmo dos 30 dias até o último pedido importado, pedir até = acaba − prazo − 7 dias; aviso no painel). Testes em tests/features.test.ts.
+

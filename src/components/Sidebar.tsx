@@ -4,7 +4,7 @@ import Image from "next/image";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import {
-  LayoutDashboard, Search, Trophy, Radar, Swords, Truck, Calculator, Bookmark, Bot, Settings, FileSpreadsheet, Menu, X, Bell, GitCompare, CreditCard, UserCircle, Shield, LogOut, ChevronDown, Sparkles, FileUp, Puzzle,
+  LayoutDashboard, Search, Trophy, Radar, Swords, Truck, Calculator, Bookmark, Bot, Settings, FileSpreadsheet, Menu, X, Bell, GitCompare, CreditCard, UserCircle, Shield, LogOut, ChevronDown, Sparkles, FileUp, Puzzle, BadgeCheck, PackageCheck,
 } from "lucide-react";
 import { signOut, switchAccount } from "@/app/actions/auth";
 import { Logo } from "./Brand";
@@ -14,7 +14,13 @@ type Item = { href: string; label: string; icon: typeof Bell; hint: string };
 
 // Menu organizado pela ordem do trabalho do vendedor: descobrir → analisar → acompanhar a própria loja.
 const GROUPS: { title: string; items: Item[] }[] = [
-  { title: "", items: [{ href: "/painel", label: "Visão geral", icon: LayoutDashboard, hint: "Resumo do dia" }] },
+  {
+    title: "",
+    items: [
+      { href: "/painel", label: "Visão geral", icon: LayoutDashboard, hint: "Resumo do dia" },
+      { href: "/vale-a-pena", label: "Vale a pena?", icon: BadgeCheck, hint: "Veredito do produto" },
+    ],
+  },
   {
     title: "Descobrir",
     items: [
@@ -37,6 +43,7 @@ const GROUPS: { title: string; items: Item[] }[] = [
     items: [
       { href: "/meus-produtos", label: "Meus produtos", icon: Bookmark, hint: "Produtos monitorados" },
       { href: "/vendas", label: "Vendas e planilha", icon: FileSpreadsheet, hint: "Importar planilha da Shopee" },
+      { href: "/estoque", label: "Estoque e reposição", icon: PackageCheck, hint: "Quando pedir" },
       { href: "/alertas", label: "Alertas", icon: Bell, hint: "Preço e margem" },
       { href: "/assistente", label: "Assistente IA", icon: Bot, hint: "Relatórios" },
       { href: "/extensao", label: "Extensão do Chrome", icon: Puzzle, hint: "Vendidos na Shopee" },

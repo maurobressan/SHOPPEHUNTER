@@ -394,6 +394,27 @@ export async function deleteBatch(f: FormData) {
   back("/vendas", "ok", "Importação removida (pedidos excluídos).");
 }
 
+export async function saveSkuStock(f: FormData) {
+  const ctx = await requireCtx();
+  const path = ret(f, "/estoque");
+  const sku = s(f, "sku");
+  const quantity = n(f, "quantity");
+  const lead = n(f, "leadTimeDays");
+  if (!sku || quantity === null || quantity < 0) back(path, "erro", "Informe a quantidade em estoque.");
+  const leadTimeDays = lead === null ? 15 : Math.max(0, Math.min(180, Math.round(lead)));
+  const data = { quantity: Math.round(quantity!), leadTimeDays, countedAt: new Date() };
+  await prisma.skuStock.upsert({ where: { accountId_sku: { accountId: ctx.accountId, sku } }, create: { accountId: ctx.accountId, sku, ...data }, update: data });
+  revalidatePath("/estoque");
+  back(path, "ok", `Estoque do SKU ${sku} salvo.`);
+}
+
+export async function deleteSkuStock(f: FormData) {
+  const ctx = await requireCtx();
+  await prisma.skuStock.deleteMany({ where: { accountId: ctx.accountId, sku: s(f, "sku") } });
+  revalidatePath("/estoque");
+  back("/estoque", "ok", "Contagem removida.");
+}
+
 export async function saveSkuCost(f: FormData) {
   const ctx = await requireCtx();
   const path = ret(f, "/vendas");
