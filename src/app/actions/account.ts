@@ -71,14 +71,15 @@ export async function removeMember(f: FormData) {
 }
 
 // ---------- Tokens da extensão ----------
-export async function createApiToken(f: FormData) {
+// O token volta só para a tela que pediu (nunca no endereço da página, que fica no histórico
+// do navegador e em registros). Ele aparece uma única vez: guardamos só o hash.
+export async function createApiToken(_prev: { token?: string; error?: string }, f: FormData): Promise<{ token?: string; error?: string }> {
   const ctx = await requireCtx();
-  if (!ctx.limits.extension) back("/conta", "erro", "A extensão não está incluída no seu plano.");
+  if (!ctx.limits.extension) return { error: "A extensão não está incluída no seu plano." };
   const token = `shp_${newToken(24)}`;
-  await prisma.apiToken.create({ data: { accountId: ctx.accountId, name: s(f, "name") || "Extensão do navegador", prefix: token.slice(0, 10), tokenHash: sha256(token) } });
+  await prisma.apiToken.create({ data: { accountId: ctx.accountId, name: (s(f, "name") || "Extensão do navegador").slice(0, 100), prefix: token.slice(0, 10), tokenHash: sha256(token) } });
   revalidatePath("/conta");
-  // O token aparece uma única vez (guardamos só o hash).
-  redirect(`/conta?token=${encodeURIComponent(token)}#extensao`);
+  return { token };
 }
 
 // Conexão automática da extensão: gera um token e devolve para a página, que o entrega à

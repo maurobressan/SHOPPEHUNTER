@@ -102,19 +102,30 @@ export async function createAccountForUser(userId: string, accountName: string) 
   return account;
 }
 
-// Limitador simples de tentativas (memória do processo). Em produção com várias instâncias, troque por Redis.
-const attempts = new Map<string, { n: number; until: number }>();
-export function tooManyAttempts(key: string, max = 8, windowMs = 15 * 60000): boolean {
-  const now = Date.now();
-  const a = attempts.get(key);
-  if (!a || a.until < now) {
-    attempts.set(key, { n: 1, until: now + windowMs });
+// Limitador de tentativas guardado no banco: vale para todos os servidores (na Vercel cada acesso
+// pode cair numa instância diferente, então a memória do processo não serve).
+export async function tooManyAttempts(key: string, max = 8, windowMs = 15 * 60000): Promise<boolean> {
+  const id = sha256(key);
+  const now = new Date();
+  if (Math.random() < 0.02) await prisma.rateLimit.deleteMany({ where: { resetAt: { lt: now } } }); // limpeza ocasional
+  const current = await prisma.rateLimit.findUnique({ where: { key: id } });
+  if (!current || current.resetAt < now) {
+    const resetAt = new Date(now.getTime() + windowMs);
+    await prisma.rateLimit.upsert({ where: { key: id }, create: { key: id, count: 1, resetAt }, update: { count: 1, resetAt } });
     return false;
   }
-  a.n++;
-  return a.n > max;
+  const updated = await prisma.rateLimit.update({ where: { key: id }, data: { count: { increment: 1 } } }); // incremento atômico
+  return updated.count > max;
 }
-export const clearAttempts = (key: string) => attempts.delete(key);
+export const clearAttempts = async (key: string) => {
+  await prisma.rateLimit.deleteMany({ where: { key: sha256(key) } });
+};
+
+// IP do visitante (na Vercel, x-real-ip e x-forwarded-for são definidos pela própria plataforma).
+export async function clientIp() {
+  const h = await headers();
+  return (h.get("x-real-ip") ?? h.get("x-forwarded-for") ?? "local").split(",")[0].trim();
+}
 
 // Autenticação por token de API (extensão do navegador).
 export async function ctxFromApiToken(req: Request) {

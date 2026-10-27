@@ -321,6 +321,16 @@ model SkuStock {
   @@id([accountId, sku])
 }
 
+// Limite de tentativas (login, cadastro, recuperação de senha) compartilhado entre servidores.
+// A chave é guardada como hash: não fica e-mail nem IP em texto puro.
+model RateLimit {
+  key     String   @id
+  count   Int
+  resetAt DateTime
+
+  @@index([resetAt])
+}
+
 model AiReport {
   id        String   @id @default(cuid())
   productId String

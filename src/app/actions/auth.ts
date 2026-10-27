@@ -1,16 +1,10 @@
 "use server";
 import { redirect } from "next/navigation";
-import { headers } from "next/headers";
 import { prisma } from "@/lib/db";
-import { createSession, destroySession, createAccountForUser, tooManyAttempts, clearAttempts, requireCtx } from "@/lib/auth";
+import { createSession, destroySession, createAccountForUser, tooManyAttempts, clearAttempts, clientIp, requireCtx } from "@/lib/auth";
 import { hashPassword, verifyPassword, newToken, sha256, passwordProblem, normalizeEmail, validEmail } from "@/lib/crypto";
 import { sendEmail, appUrl, emailConfigured } from "@/lib/email";
 import { s, back, ret } from "@/lib/form";
-
-async function ip() {
-  const h = await headers();
-  return (h.get("x-forwarded-for") ?? "local").split(",")[0].trim();
-}
 
 export async function signUp(f: FormData) {
   const name = s(f, "name");
@@ -24,7 +18,7 @@ export async function signUp(f: FormData) {
   const pwErr = passwordProblem(password);
   if (pwErr) back(path, "erro", pwErr);
   if (f.get("terms") !== "on") back(path, "erro", "É preciso aceitar os Termos de Uso e a Política de Privacidade.");
-  if (tooManyAttempts(`signup:${await ip()}`, 10)) back(path, "erro", "Muitas tentativas. Aguarde alguns minutos.");
+  if (await tooManyAttempts(`signup:${await clientIp()}`, 10)) back(path, "erro", "Muitas tentativas. Aguarde alguns minutos.");
   if (await prisma.user.findUnique({ where: { email } })) back(path, "erro", "Já existe uma conta com este e-mail. Faça login.");
   const inv = invite ? await prisma.invite.findUnique({ where: { tokenHash: sha256(invite) } }) : null;
   if (invite && (!inv || inv.acceptedAt || inv.expiresAt < new Date() || normalizeEmail(inv.email) !== email)) back(path, "erro", "Convite inválido, expirado ou para outro e-mail.");
@@ -46,11 +40,12 @@ export async function signIn(f: FormData) {
   const email = normalizeEmail(s(f, "email"));
   const password = s(f, "password");
   const key = `login:${email}`;
-  if (tooManyAttempts(key)) back("/login", "erro", "Muitas tentativas. Aguarde 15 minutos ou redefina sua senha.");
+  // limite por e-mail (protege a conta) e por IP (impede testar muitas contas a partir do mesmo lugar)
+  if ((await tooManyAttempts(key)) || (await tooManyAttempts(`login-ip:${await clientIp()}`, 30))) back("/login", "erro", "Muitas tentativas. Aguarde 15 minutos ou redefina sua senha.");
   const user = await prisma.user.findUnique({ where: { email }, include: { memberships: { orderBy: { createdAt: "asc" } } } });
   if (!user || !(await verifyPassword(password, user.passwordHash))) back("/login", "erro", "E-mail ou senha incorretos.");
   if (!user!.memberships.length) back("/login", "erro", "Este usuário não pertence a nenhuma conta.");
-  clearAttempts(key);
+  await clearAttempts(key);
   await createSession(user!.id, user!.memberships[0].accountId);
   redirect(ret(f, "/painel"));
 }
@@ -71,7 +66,7 @@ export async function switchAccount(f: FormData) {
 
 export async function requestReset(f: FormData) {
   const email = normalizeEmail(s(f, "email"));
-  if (tooManyAttempts(`reset:${await ip()}`, 5)) back("/recuperar-senha", "erro", "Muitas tentativas. Aguarde alguns minutos.");
+  if (await tooManyAttempts(`reset:${await clientIp()}`, 5)) back("/recuperar-senha", "erro", "Muitas tentativas. Aguarde alguns minutos.");
   const user = await prisma.user.findUnique({ where: { email } });
   if (user) {
     const token = newToken();

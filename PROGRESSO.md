@@ -46,3 +46,5 @@ Calculadora com tarifas oficiais (out/2026), cálculo reverso, kits, cenários; 
 
 - Novos recursos (27/10/2026): 'Vale a pena?' (/vale-a-pena, veredito em semáforo baseado no Hunter Score, com a regra de cada item e próximos passos; aceita link do anúncio); Shopee Ads na calculadora (ROAS mínimo e alvo, ACOS, CPC máximo, resultado da campanha — src/lib/ads.ts); Estoque e reposição (/estoque, modelo SkuStock + migração 20261027000000_sku_stock, ritmo dos 30 dias até o último pedido importado, pedir até = acaba − prazo − 7 dias; aviso no painel). Testes em tests/features.test.ts.
 
+- Segurança (27/10/2026): limite de tentativas de login/cadastro/recuperação agora no banco (modelo RateLimit, chave em hash, migração 20261027010000_rate_limit), com limite também por IP no login; token da extensão não passa mais pelo endereço da página (aparece só na tela, com botão Copiar).
+

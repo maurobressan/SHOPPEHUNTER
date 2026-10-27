@@ -1,9 +1,10 @@
 import { prisma } from "@/lib/db";
 import { requireCtx } from "@/lib/auth";
 import { appUrl } from "@/lib/email";
-import { updateProfile, changePassword, inviteMember, revokeInvite, removeMember, createApiToken, revokeApiToken, deleteAccount } from "@/app/actions/account";
+import { updateProfile, changePassword, inviteMember, revokeInvite, removeMember, revokeApiToken, deleteAccount } from "@/app/actions/account";
 import { Card, PageHeader, Field, input, btnPrimary, btnGhost, btnDanger, Table, td, Badge, Notice } from "@/components/ui";
 import { Flash, type SP } from "@/components/Flash";
+import { TokenForm } from "./TokenForm";
 import { date, dateTime, str } from "@/lib/format";
 
 export const metadata = { title: "Minha conta" };
@@ -18,7 +19,6 @@ export default async function Conta({ searchParams }: { searchParams: Promise<SP
     prisma.invite.findMany({ where: { accountId: ctx.accountId, acceptedAt: null, expiresAt: { gt: new Date() } } }),
     prisma.apiToken.findMany({ where: { accountId: ctx.accountId }, orderBy: { createdAt: "desc" } }),
   ]);
-  const newToken = str(sp.token);
   const manager = ctx.role !== "member";
 
   return (
@@ -75,14 +75,6 @@ export default async function Conta({ searchParams }: { searchParams: Promise<SP
 
       <Card title="Extensão “Salvar no Hunter”" className="mt-6">
         <div id="extensao" />
-        {newToken && (
-          <div className="mb-4">
-            <Notice tone="green">
-              Token criado. Copie agora — por segurança ele não será exibido de novo:
-              <code className="mt-2 block break-all rounded bg-bg p-2 text-sm text-ink">{newToken}</code>
-            </Notice>
-          </div>
-        )}
         <div className="grid gap-6 lg:grid-cols-2">
           <div className="text-sm text-mute">
             <div className="mb-4"><Notice tone="blue">O jeito mais fácil é pela página <a href="/extensao" className="font-semibold text-brand-blue underline">Extensão do Chrome</a>: instale e clique em <b>Conectar extensão</b>, sem copiar token. Os passos abaixo são a forma manual.</Notice></div>
@@ -111,10 +103,7 @@ export default async function Conta({ searchParams }: { searchParams: Promise<SP
                 </tr>
               ))}
             </Table>
-            <form action={createApiToken} className="mt-3 flex items-end gap-2">
-              <Field label="Nome do token"><input name="name" placeholder="Chrome do escritório" className={input} /></Field>
-              <button className={btnPrimary}>Gerar token</button>
-            </form>
+            <TokenForm />
           </div>
         </div>
       </Card>

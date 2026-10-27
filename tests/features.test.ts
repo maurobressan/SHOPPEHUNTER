@@ -1,6 +1,19 @@
 import { describe, expect, it } from "vitest";
 import { adsBreakEven } from "../src/lib/ads";
 import { restockPlan, type StockLine } from "../src/lib/restock";
+import { readFileSync } from "node:fs";
+
+describe("segurança", () => {
+  it("o token da extensão não é colocado no endereço da página", () => {
+    const src = readFileSync("src/app/actions/account.ts", "utf8");
+    expect(src).not.toMatch(/token=\$\{/);
+  });
+  it("o limite de tentativas é guardado no banco e sempre aguardado", () => {
+    expect(readFileSync("src/lib/auth.ts", "utf8")).toContain("prisma.rateLimit");
+    const actions = readFileSync("src/app/actions/auth.ts", "utf8");
+    expect(actions.match(/tooManyAttempts\(/g)!.length).toBe(actions.match(/await tooManyAttempts\(/g)!.length);
+  });
+});
 
 describe("Shopee Ads", () => {
   it("ROAS e gasto máximo por venda a partir da margem sem anúncio", () => {
