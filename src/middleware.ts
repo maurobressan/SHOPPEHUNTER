@@ -4,7 +4,7 @@ import { NextResponse, type NextRequest } from "next/server";
 
 const PROTECTED = [
   "/painel", "/explorar", "/campeoes", "/tendencias", "/concorrencia", "/fornecedores", "/calculadora", "/comparar",
-  "/meus-produtos", "/produtos", "/vendas", "/assistente", "/alertas", "/configuracoes", "/conta", "/assinatura", "/admin",
+  "/meus-produtos", "/produtos", "/vendas", "/assistente", "/alertas", "/configuracoes", "/conta", "/assinatura", "/admin", "/extensao",
 ];
 
 export function middleware(req: NextRequest) {
@@ -12,7 +12,7 @@ export function middleware(req: NextRequest) {
   if (PROTECTED.some((p) => pathname === p || pathname.startsWith(p + "/")) && !req.cookies.get("shp_session")) {
     const url = req.nextUrl.clone();
     url.pathname = "/login";
-    url.search = "";
+    url.search = "?next=" + encodeURIComponent(pathname);
     return NextResponse.redirect(url);
   }
   return NextResponse.next();

@@ -1,35 +1,41 @@
 const $ = (id) => document.getElementById(id);
+const DEFAULT_URL = "https://shoppehunter.vercel.app";
 
-chrome.storage.sync.get(["appUrl", "token"]).then(({ appUrl, token }) => {
-  $("url").value = appUrl || "https://shoppehunter.vercel.app";
-  $("token").value = token || "";
-});
-
-$("save").onclick = async () => {
-  const appUrl = $("url").value.trim().replace(/\/$/, "");
-  const token = $("token").value.trim();
-  const msg = $("msg");
-  let origin;
-  try {
-    origin = new URL(appUrl).origin;
-  } catch {
-    msg.textContent = "Endereço inválido.";
+async function test() {
+  const { appUrl, token } = await chrome.storage.sync.get(["appUrl", "token"]);
+  const base = (appUrl || DEFAULT_URL).replace(/\/$/, "");
+  const st = $("status");
+  if (!token) {
+    st.className = "st off";
+    st.textContent = "Ainda não conectada à sua conta.";
     return;
   }
-  // permissão para acessar o endereço informado (pedido pelo próprio Chrome)
-  const granted = await chrome.permissions.request({ origins: [origin + "/*"] }).catch(() => false);
-  if (!granted && origin !== "https://shoppehunter.vercel.app" && origin !== "http://localhost:3000") {
-    msg.textContent = "Permissão negada para " + origin;
-    return;
-  }
-  await chrome.storage.sync.set({ appUrl, token });
-  msg.textContent = "Testando…";
   try {
-    const r = await fetch(appUrl + "/api/ext/context", { headers: { Authorization: "Bearer " + token } });
+    const r = await fetch(base + "/api/ext/context", { headers: { Authorization: "Bearer " + token } });
     const d = await r.json();
-    msg.style.color = r.ok ? "#22c55e" : "#f87171";
-    msg.textContent = r.ok ? `Conectado! Plano ${d.plan}, ${d.products.length} produto(s).` : d.error || "Erro " + r.status;
+    st.className = r.ok ? "st on" : "st off";
+    st.textContent = r.ok ? `Conectada ✓ · plano ${d.plan} · ${d.products.length} produto(s)` : d.error || "Erro " + r.status;
   } catch {
-    msg.innerHTML = `<span style="color:#f87171">Não foi possível conectar. Confira o endereço e a internet.</span>`;
+    st.className = "st off";
+    st.textContent = "Sem conexão com o Shoppe Hunter. Confira a internet.";
   }
+}
+
+$("connect").onclick = async () => {
+  const { appUrl } = await chrome.storage.sync.get(["appUrl"]);
+  chrome.tabs.create({ url: (appUrl || DEFAULT_URL).replace(/\/$/, "") + "/extensao" });
 };
+$("shopee").onclick = () => chrome.tabs.create({ url: "https://shopee.com.br" });
+$("save").onclick = async () => {
+  const token = $("token").value.trim();
+  if (!/^shp_[\w-]+$/.test(token)) {
+    $("msg").textContent = "Token inválido.";
+    return;
+  }
+  const { appUrl } = await chrome.storage.sync.get(["appUrl"]);
+  await chrome.storage.sync.set({ token, appUrl: appUrl || DEFAULT_URL });
+  $("msg").textContent = "";
+  test();
+};
+
+test();

@@ -22,6 +22,11 @@ async function call(path, init = {}) {
   }
 }
 
+// Logo após instalar, abre a página do site que conecta a extensão à conta.
+chrome.runtime.onInstalled.addListener(({ reason }) => {
+  if (reason === "install") chrome.tabs.create({ url: DEFAULT_URL + "/extensao" });
+});
+
 chrome.runtime.onMessage.addListener((msg, _sender, reply) => {
   if (msg.type === "context") call("/api/ext/context?url=" + encodeURIComponent(msg.url)).then(reply);
   else if (msg.type === "capture") call("/api/ext/capture", { method: "POST", body: JSON.stringify(msg.payload) }).then(reply);

@@ -5,7 +5,7 @@ import { prisma } from "@/lib/db";
 import { createSession, destroySession, createAccountForUser, tooManyAttempts, clearAttempts, requireCtx } from "@/lib/auth";
 import { hashPassword, verifyPassword, newToken, sha256, passwordProblem, normalizeEmail, validEmail } from "@/lib/crypto";
 import { sendEmail, appUrl, emailConfigured } from "@/lib/email";
-import { s, back } from "@/lib/form";
+import { s, back, ret } from "@/lib/form";
 
 async function ip() {
   const h = await headers();
@@ -52,7 +52,7 @@ export async function signIn(f: FormData) {
   if (!user!.memberships.length) back("/login", "erro", "Este usuário não pertence a nenhuma conta.");
   clearAttempts(key);
   await createSession(user!.id, user!.memberships[0].accountId);
-  redirect("/painel");
+  redirect(ret(f, "/painel"));
 }
 
 export async function signOut() {

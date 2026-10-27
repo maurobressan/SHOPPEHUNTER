@@ -42,3 +42,5 @@ Calculadora com tarifas oficiais (out/2026), cálculo reverso, kits, cenários; 
 
 - Extensão 1.1: nas buscas, categorias e lojas da Shopee cada anúncio ganha um selo com os vendidos (e as vendas medidas, se já acompanhado); painel com mais vendidos, preço mediano e tarifa; botão para salvar todos os anúncios da página como concorrentes. Vendas 'por mês' não são tratadas como total. Rota /api/ext/lookup. Endereço padrão = site publicado. Download em /shoppe-hunter-extensao.zip (gerar de novo com Compress-Archive quando a extensão mudar).
 
+- Extensão 1.2: página /extensao no site com detecção da extensão e botão 'Conectar extensão' (sem copiar token; o site entrega o token por window.postMessage a um script da extensão que só roda no domínio do Hunter). Login volta para a página pedida (?next=). Pasta loja-chrome/ com pacote, imagens e textos para a Chrome Web Store; 'npm run ext:pack' gera os dois .zip. Depois de aprovada, definir NEXT_PUBLIC_EXTENSION_URL na Vercel.
+

@@ -12,6 +12,7 @@
         "coletar": "tsx scripts/coletar.ts",
         "setup": "prisma db push && tsx prisma/seed.ts",
         "db:pg:sync": "node scripts/pg-schema.mjs",
+    "ext:pack": "node scripts/pack-extension.mjs",
         "vercel-build": "prisma generate --schema prisma/postgres/schema.prisma && prisma migrate deploy --schema prisma/postgres/schema.prisma && tsx prisma/seed.ts && next build"
     },
     "dependencies": {

@@ -1,11 +1,11 @@
 {
   "manifest_version": 3,
-  "name": "Shoppe Hunter — Salvar no Hunter",
-  "version": "1.1.0",
-  "description": "Mostra vendidos, tarifas e margem dos anúncios da Shopee que você está vendo e salva concorrentes no Shoppe Hunter.",
+  "name": "Shoppe Hunter — vendidos e lucro na Shopee",
+  "short_name": "Shoppe Hunter",
+  "version": "1.2.0",
+  "description": "Veja os vendidos dos concorrentes, as tarifas e a margem dos anúncios da Shopee que você está vendo e salve no Shoppe Hunter.",
   "permissions": ["storage"],
   "host_permissions": ["https://shoppehunter.vercel.app/*", "http://localhost:3000/*"],
-  "optional_host_permissions": ["https://*/*", "http://*/*"],
   "background": { "service_worker": "background.js" },
   "content_scripts": [
     {
@@ -13,6 +13,11 @@
       "exclude_matches": ["https://seller.shopee.com.br/*"],
       "js": ["fees.js", "parse.js", "content.js"],
       "run_at": "document_idle"
+    },
+    {
+      "matches": ["https://shoppehunter.vercel.app/*", "http://localhost:3000/*"],
+      "js": ["site.js"],
+      "run_at": "document_start"
     }
   ],
   "web_accessible_resources": [{ "resources": ["icons/icon48.png"], "matches": ["https://shopee.com.br/*", "https://*.shopee.com.br/*"] }],

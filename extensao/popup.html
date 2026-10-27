@@ -8,9 +8,13 @@
   header img { width: 26px; height: 26px; }
   header i { font-style: normal; color: #5fe0f5; }
   main { padding: 12px 14px 14px; }
+  .st { border-radius: 10px; padding: 10px; font-weight: 600; }
+  .on { background: #e7f6ee; color: #128a4c; } .off { background: #fff4e5; color: #b45309; }
   label { display: block; font-size: 11px; font-weight: 600; color: #5c6a8a; margin: 8px 0 3px; }
   input { width: 100%; box-sizing: border-box; background: #fff; color: #0f1b3d; border: 1px solid #d8e1f0; border-radius: 9px; padding: 7px 8px; }
-  button { width: 100%; margin-top: 12px; padding: 9px; border: 0; border-radius: 10px; font-weight: 700; cursor: pointer; background: linear-gradient(90deg,#1565ff,#18c8e8); color: #fff; }
+  button { width: 100%; margin-top: 10px; padding: 9px; border: 0; border-radius: 10px; font-weight: 700; cursor: pointer; background: linear-gradient(90deg,#1565ff,#18c8e8); color: #fff; }
+  button.ghost { background: #fff; color: #0f1b3d; border: 1px solid #d8e1f0; }
+  details { margin-top: 12px; font-size: 12px; color: #5c6a8a; }
   #msg { margin-top: 8px; font-size: 12px; }
   p { color: #5c6a8a; font-size: 11px; line-height: 1.45; }
 </style>
@@ -18,13 +22,17 @@
 <body>
   <header><img src="icons/icon48.png" alt="">Shoppe<i>Hunter</i></header>
   <main>
-    <label>Token (no site: Minha conta → Extensão)</label>
-    <input id="token" placeholder="shp_...">
-    <label>Endereço do Shoppe Hunter</label>
-    <input id="url" placeholder="https://shoppehunter.vercel.app">
-    <button id="save">Salvar e testar</button>
+    <div id="status" class="st off">Verificando…</div>
+    <button id="connect">Conectar com a minha conta</button>
+    <button id="shopee" class="ghost">Abrir a Shopee</button>
+    <p>Conectado, faça uma busca na Shopee: cada anúncio ganha um selo com os vendidos e o painel aparece no canto da tela.</p>
+    <details>
+      <summary>Conectar com token (avançado)</summary>
+      <label>Token (no site: Minha conta → Extensão)</label>
+      <input id="token" placeholder="shp_...">
+      <button id="save" class="ghost">Salvar token</button>
+    </details>
     <div id="msg"></div>
-    <p>Depois, entre na Shopee com a sua conta e faça uma busca ou abra um anúncio. Cada anúncio ganha um selo com os vendidos e o painel aparece no canto inferior direito.</p>
   </main>
   <script src="popup.js"></script>
 </body>

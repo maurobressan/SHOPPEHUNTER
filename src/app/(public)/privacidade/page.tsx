@@ -26,6 +26,13 @@ export default function Privacidade() {
       <p>Somente com operadores necessários ao serviço: hospedagem, banco de dados, envio de e-mail, pagamentos e, quando você usa a análise com IA, o provedor de IA configurado (recebe apenas os dados do produto analisado).</p>
       <h2>Planilhas de vendas</h2>
       <p>As planilhas podem conter dados de pedidos. Usamos apenas os campos necessários ao relatório (pedido, SKU, valores, datas e status). Não importamos dados de contato dos compradores.</p>
+      <h2 id="extensao">Extensão do Chrome</h2>
+      <ul>
+        <li>A extensão só funciona nas páginas de shopee.com.br que você abre e nas páginas do próprio Shoppe Hunter. Ela não lê outros sites, seu histórico de navegação, senhas ou dados de pagamento.</li>
+        <li>Na Shopee, lê o texto visível dos anúncios (título, preço, quantidade vendida, nota e número de avaliações) para mostrar o painel. Envia à sua conta no Shoppe Hunter os números de identificação dos anúncios da página (para mostrar o histórico que você já salvou) e, quando você clica em salvar, os dados lidos do anúncio.</li>
+        <li>Guarda no navegador apenas o token de acesso à sua conta e o endereço do Shoppe Hunter. O token pode ser revogado a qualquer momento em Minha conta.</li>
+        <li>Os dados não são vendidos nem usados para publicidade, e não são compartilhados com terceiros além dos operadores listados acima.</li>
+      </ul>
       <h2>Seus direitos</h2>
       <p>Você pode acessar, corrigir, exportar (em Minha conta → Exportar meus dados) e excluir seus dados (Minha conta → Excluir conta), além de revogar consentimentos. Para outras solicitações: {email}.</p>
       <h2>Retenção</h2>

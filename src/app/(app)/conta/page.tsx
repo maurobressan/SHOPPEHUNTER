@@ -85,6 +85,7 @@ export default async function Conta({ searchParams }: { searchParams: Promise<SP
         )}
         <div className="grid gap-6 lg:grid-cols-2">
           <div className="text-sm text-mute">
+            <div className="mb-4"><Notice tone="blue">O jeito mais fácil é pela página <a href="/extensao" className="font-semibold text-brand-blue underline">Extensão do Chrome</a>: instale e clique em <b>Conectar extensão</b>, sem copiar token. Os passos abaixo são a forma manual.</Notice></div>
             <p>Com a extensão, você entra na Shopee com a sua conta normalmente e o Hunter lê o que está na tela:</p>
             <ul className="mt-2 list-disc space-y-1 pl-5">
               <li><b className="text-ink">Na busca, categoria ou loja:</b> cada anúncio ganha um selo com os vendidos, e um painel mostra os mais vendidos, o preço mediano e a tarifa. Um botão salva todos como concorrentes.</li>

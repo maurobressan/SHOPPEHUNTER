@@ -81,6 +81,21 @@ export async function createApiToken(f: FormData) {
   redirect(`/conta?token=${encodeURIComponent(token)}#extensao`);
 }
 
+// Conexão automática da extensão: gera um token e devolve para a página, que o entrega à
+// extensão instalada. O token anterior desta mesma conexão (mesmo usuário) é substituído.
+export async function connectExtension(): Promise<{ token?: string; error?: string }> {
+  const ctx = await requireCtx();
+  if (!ctx.limits.extension) return { error: "A extensão não está incluída no seu plano. Veja os planos em Assinatura." };
+  const name = `Chrome de ${ctx.user.name.split(" ")[0]} (conexão automática)`.slice(0, 100);
+  const token = `shp_${newToken(24)}`;
+  await prisma.$transaction([
+    prisma.apiToken.deleteMany({ where: { accountId: ctx.accountId, name } }),
+    prisma.apiToken.create({ data: { accountId: ctx.accountId, name, prefix: token.slice(0, 10), tokenHash: sha256(token) } }),
+  ]);
+  revalidatePath("/conta");
+  return { token };
+}
+
 export async function revokeApiToken(f: FormData) {
   const ctx = await requireCtx();
   await prisma.apiToken.deleteMany({ where: { id: s(f, "id"), accountId: ctx.accountId } });

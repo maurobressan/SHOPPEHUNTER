@@ -4,7 +4,7 @@ import Image from "next/image";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import {
-  LayoutDashboard, Search, Trophy, Radar, Swords, Truck, Calculator, Bookmark, Bot, Settings, FileSpreadsheet, Menu, X, Bell, GitCompare, CreditCard, UserCircle, Shield, LogOut, ChevronDown, Sparkles, FileUp,
+  LayoutDashboard, Search, Trophy, Radar, Swords, Truck, Calculator, Bookmark, Bot, Settings, FileSpreadsheet, Menu, X, Bell, GitCompare, CreditCard, UserCircle, Shield, LogOut, ChevronDown, Sparkles, FileUp, Puzzle,
 } from "lucide-react";
 import { signOut, switchAccount } from "@/app/actions/auth";
 import { Logo } from "./Brand";
@@ -39,6 +39,7 @@ const GROUPS: { title: string; items: Item[] }[] = [
       { href: "/vendas", label: "Vendas e planilha", icon: FileSpreadsheet, hint: "Importar planilha da Shopee" },
       { href: "/alertas", label: "Alertas", icon: Bell, hint: "Preço e margem" },
       { href: "/assistente", label: "Assistente IA", icon: Bot, hint: "Relatórios" },
+      { href: "/extensao", label: "Extensão do Chrome", icon: Puzzle, hint: "Vendidos na Shopee" },
     ],
   },
 ];
